@@ -15,6 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'assignee' => \App\Http\Middleware\AssigneeMiddleware::class,
+            'supervisor' => \App\Http\Middleware\SupervisorMiddleware::class,
+            'monitor' => \App\Http\Middleware\MonitorMiddleware::class,
             'active' => \App\Http\Middleware\EnsureUserIsActive::class,
         ]);
     })

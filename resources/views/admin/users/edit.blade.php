@@ -31,6 +31,7 @@
                             <label class="form-label">Role</label>
                             <select name="role" class="form-select">
                                 <option value="assignee" @selected($user->role==='assignee')>Assignee</option>
+                                <option value="supervisor" @selected($user->role==='supervisor')>Supervisor</option>
                                 <option value="admin" @selected($user->role==='admin')>Admin</option>
                             </select>
                         </div>

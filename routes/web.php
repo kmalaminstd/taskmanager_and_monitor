@@ -12,9 +12,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (auth()->check()) {
-        return auth()->user()->isAdmin()
-            ? redirect()->route('admin.dashboard')
-            : redirect()->route('assignee.dashboard');
+        $user = auth()->user();
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+        if ($user->isSupervisor()) {
+            return redirect()->route('supervisor.dashboard');
+        }
+        return redirect()->route('assignee.dashboard');
     }
     return redirect()->route('login');
 });
@@ -100,6 +105,36 @@ Route::prefix('assignee')
 
         // Performance
         Route::get('/performance', [App\Http\Controllers\Assignee\PerformanceController::class, 'index'])->name('performance.index');
+    });
+
+
+// ==================== SUPERVISOR ====================
+Route::prefix('supervisor')
+    ->name('supervisor.')
+    ->middleware(['auth', 'active', 'supervisor'])
+    ->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\Supervisor\DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/tasks', [App\Http\Controllers\Supervisor\TaskController::class, 'index'])->name('tasks.index');
+        Route::get('/tasks/create', [App\Http\Controllers\Supervisor\TaskController::class, 'create'])->name('tasks.create');
+        Route::post('/tasks', [App\Http\Controllers\Supervisor\TaskController::class, 'store'])->name('tasks.store');
+        Route::get('/tasks/{task}', [App\Http\Controllers\Supervisor\TaskController::class, 'show'])->name('tasks.show');
+        Route::get('/tasks/{task}/edit', [App\Http\Controllers\Supervisor\TaskController::class, 'edit'])->name('tasks.edit');
+        Route::put('/tasks/{task}', [App\Http\Controllers\Supervisor\TaskController::class, 'update'])->name('tasks.update');
+
+        Route::get('/approvals', [App\Http\Controllers\Supervisor\ApprovalController::class, 'index'])->name('approvals.index');
+        Route::post('/approvals/submissions/{submission}/approve', [App\Http\Controllers\Supervisor\ApprovalController::class, 'approveSubmission'])->name('approvals.submissions.approve');
+        Route::post('/approvals/submissions/{submission}/return', [App\Http\Controllers\Supervisor\ApprovalController::class, 'returnSubmission'])->name('approvals.submissions.return');
+        Route::post('/approvals/extensions/{extension}/approve', [App\Http\Controllers\Supervisor\ApprovalController::class, 'approveExtension'])->name('approvals.extensions.approve');
+        Route::post('/approvals/extensions/{extension}/reject', [App\Http\Controllers\Supervisor\ApprovalController::class, 'rejectExtension'])->name('approvals.extensions.reject');
+        Route::post('/approvals/transfers/{transfer}/approve', [App\Http\Controllers\Supervisor\ApprovalController::class, 'approveTransfer'])->name('approvals.transfers.approve');
+        Route::post('/approvals/transfers/{transfer}/reject', [App\Http\Controllers\Supervisor\ApprovalController::class, 'rejectTransfer'])->name('approvals.transfers.reject');
+
+        Route::get('/team', [App\Http\Controllers\Supervisor\TeamController::class, 'index'])->name('team.index');
+        Route::get('/team/{user}', [App\Http\Controllers\Supervisor\TeamController::class, 'show'])->name('team.show');
+
+        Route::get('/performance', [App\Http\Controllers\Supervisor\PerformanceController::class, 'index'])->name('performance.index');
+        Route::get('/performance/{user}', [App\Http\Controllers\Supervisor\PerformanceController::class, 'show'])->name('performance.show');
     });
 
 // Notifications (both roles)

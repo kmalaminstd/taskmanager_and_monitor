@@ -3,8 +3,8 @@
 <?php $__env->startSection('content'); ?>
 <div class="login-card">
     <div class="login-header">
-        <h3 class="mb-1 fw-bold"><i class="bi bi-check2-square"></i> TASK MASTER</h3>
-        <p class="mb-0 opacity-75">Task Management System</p>
+        <h3 class="mb-1"><i class="bi bi-check2-square"></i> TASK MASTER</h3>
+        <p class="mb-0 opacity-75" style="font-size:0.9rem;">Task Management System</p>
     </div>
     <div class="p-4 p-md-5">
         <?php if(session('error')): ?>
@@ -15,7 +15,7 @@
             <?php echo csrf_field(); ?>
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" name="email" id="email" 
+                <input type="email" name="email" id="email"
                        class="form-control form-control-lg <?php $__errorArgs = ['email'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -24,7 +24,8 @@ $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>"
-                       value="<?php echo e(old('email')); ?>" required autofocus>
+                       value="<?php echo e(old('email')); ?>" required autofocus
+                       placeholder="you@example.com">
                 <?php $__errorArgs = ['email'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -39,7 +40,7 @@ unset($__errorArgs, $__bag); ?>
 
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" id="password" 
+                <input type="password" name="password" id="password"
                        class="form-control form-control-lg <?php $__errorArgs = ['password'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -47,7 +48,8 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" required>
+unset($__errorArgs, $__bag); ?>"
+                       required placeholder="••••••••">
                 <?php $__errorArgs = ['password'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -70,9 +72,10 @@ unset($__errorArgs, $__bag); ?>
             </button>
         </form>
 
-        <div class="mt-4 text-center text-muted small">
-            <p class="mb-1">Demo Accounts:</p>
+        <div class="mt-4 text-center text-muted" style="font-size:0.8rem;">
+            <p class="mb-1 fw-medium">Demo Accounts</p>
             <p class="mb-0">Admin: admin@taskmaster.test / password</p>
+            <p class="mb-0">Supervisor: supervisor@taskmaster.test / password</p>
             <p class="mb-0">Assignee: rahim@taskmaster.test / password</p>
         </div>
     </div>

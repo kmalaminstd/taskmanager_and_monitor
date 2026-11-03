@@ -20,7 +20,8 @@
             <small>Admin Panel</small>
         </div>
         <nav class="nav flex-column">
-            <div class="navbarLinksWrapper">
+            <div>
+
                 <a href="<?php echo e(route('admin.dashboard')); ?>" class="nav-link <?php echo e(request()->routeIs('admin.dashboard') ? 'active' : ''); ?>">
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>

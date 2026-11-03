@@ -49,6 +49,7 @@
         <div class="mt-4 text-center text-muted" style="font-size:0.8rem;">
             <p class="mb-1 fw-medium">Demo Accounts</p>
             <p class="mb-0">Admin: admin@taskmaster.test / password</p>
+            <p class="mb-0">Supervisor: supervisor@taskmaster.test / password</p>
             <p class="mb-0">Assignee: rahim@taskmaster.test / password</p>
         </div>
     </div>

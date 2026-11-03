@@ -12,8 +12,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Admin user
-        $admin = User::create([
+        User::create([
             'name' => 'System Admin',
             'email' => 'admin@taskmaster.test',
             'password' => Hash::make('password'),
@@ -21,7 +20,14 @@ class DatabaseSeeder extends Seeder
             'status' => 'active',
         ]);
 
-        // Sample assignees
+        User::create([
+            'name' => 'Team Supervisor',
+            'email' => 'supervisor@taskmaster.test',
+            'password' => Hash::make('password'),
+            'role' => 'supervisor',
+            'status' => 'active',
+        ]);
+
         $assignees = [
             ['name' => 'Rahim Khan', 'email' => 'rahim@taskmaster.test'],
             ['name' => 'Karim Ahmed', 'email' => 'karim@taskmaster.test'],
@@ -40,7 +46,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Categories
         $categories = [
             ['name' => 'Development', 'slug' => 'development', 'color' => '#2563EB'],
             ['name' => 'Design', 'slug' => 'design', 'color' => '#7C3AED'],
@@ -54,7 +59,6 @@ class DatabaseSeeder extends Seeder
             TaskCategory::create($cat);
         }
 
-        // Default system settings
         $settings = [
             ['key' => 'app_name', 'value' => 'TASK MASTER', 'type' => 'string', 'group' => 'general'],
             ['key' => 'default_priority', 'value' => 'medium', 'type' => 'string', 'group' => 'tasks'],
@@ -72,7 +76,8 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->command->info('Database seeded successfully!');
-        $this->command->info('Admin login: admin@taskmaster.test / password');
-        $this->command->info('Assignee logins: rahim@taskmaster.test / password (and others)');
+        $this->command->info('Admin: admin@taskmaster.test / password');
+        $this->command->info('Supervisor: supervisor@taskmaster.test / password');
+        $this->command->info('Assignee: rahim@taskmaster.test / password');
     }
 }

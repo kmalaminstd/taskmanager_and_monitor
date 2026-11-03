@@ -60,6 +60,10 @@ class LoginController extends Controller
             return redirect()->intended(route('admin.dashboard'));
         }
 
+        if ($user->isSupervisor()) {
+            return redirect()->intended(route('supervisor.dashboard'));
+        }
+
         return redirect()->intended(route('assignee.dashboard'));
     }
 }

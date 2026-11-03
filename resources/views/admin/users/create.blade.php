@@ -31,6 +31,7 @@
                             <label class="form-label">Role</label>
                             <select name="role" class="form-select">
                                 <option value="assignee">Assignee</option>
+                                <option value="supervisor">Supervisor</option>
                                 <option value="admin">Admin</option>
                             </select>
                         </div>

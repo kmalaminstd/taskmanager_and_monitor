@@ -16,13 +16,13 @@ class CalendarController extends Controller
         $start = Carbon::parse($month)->startOfMonth()->startOfWeek(Carbon::SUNDAY);
         $end = Carbon::parse($month)->endOfMonth()->endOfWeek(Carbon::SATURDAY);
 
-        if ($user->isAdmin()) {
+        if ($user->isAdmin() || $user->isSupervisor()) {
             $assignments = TaskAssignment::with(['task', 'assignee'])
                 ->where('is_active', true)
                 ->whereBetween('deadline', [$start, $end])
                 ->get();
 
-            $personalTasks = collect(); // Admin doesn't see personal by default
+            $personalTasks = collect();
         } else {
             $assignments = TaskAssignment::with(['task'])
                 ->where('assignee_id', $user->id)

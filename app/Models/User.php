@@ -80,6 +80,17 @@ class User extends Authenticatable
         return $this->role === 'assignee';
     }
 
+    public function isSupervisor(): bool
+    {
+        return $this->role === 'supervisor';
+    }
+
+    /** Admin or Supervisor can monitor tasks */
+    public function canMonitor(): bool
+    {
+        return in_array($this->role, ['admin', 'supervisor'], true);
+    }
+
     public function isActive(): bool
     {
         return $this->status === 'active';

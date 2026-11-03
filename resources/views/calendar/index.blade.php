@@ -1,4 +1,4 @@
-@extends(auth()->user()->isAdmin() ? 'layouts.admin' : 'layouts.assignee')
+@extends(auth()->user()->isAdmin() ? 'layouts.admin' : (auth()->user()->isSupervisor() ? 'layouts.supervisor' : 'layouts.assignee'))
 
 @section('title', 'Calendar')
 @section('page-title', 'Task Calendar')
