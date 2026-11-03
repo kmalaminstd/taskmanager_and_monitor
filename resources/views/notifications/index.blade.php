@@ -31,14 +31,9 @@
                 </div>
                 <div>
                     @if(!empty($notification->data['url']))
-                        <form method="POST"
-                            action="{{ route('notifications.read', $notification->id) }}">
-                            @csrf
-
-                            <button type="submit" class="btn btn-sm btn-outline-primary">
-                                View
-                            </button>
-                        </form>
+                        <a href="{{ route('notifications.read', $notification->id) }}" class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
                     @else
                         <form method="POST" action="{{ route('notifications.read', $notification->id) }}">
                             @csrf

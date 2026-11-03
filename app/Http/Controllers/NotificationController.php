@@ -15,32 +15,14 @@ class NotificationController extends Controller
         return view('notifications.index', compact('notifications'));
     }
 
-        public function markAsRead($id)
-        {
-            $notification = auth()->user()->notifications()->where('id', $id)->firstOrFail();
-            $notification->markAsRead();
+    public function markAsRead($id)
+    {
+        $notification = auth()->user()->notifications()->where('id', $id)->firstOrFail();
+        $notification->markAsRead();
 
-            $url = $notification->data['url'] ?? null;
-            return $url ? redirect($url) : back();
-        }
-
-    // public function markAsRead($id)
-    // {
-    //     $notification = auth()->user()
-    //         ->notifications()
-    //         ->where('id', $id)
-    //         ->firstOrFail();
-
-    //     $notification->markAsRead();
-
-    //     $url = $notification->data['url'] ?? null;
-
-    //     if ($url && str_starts_with($url, '/') && !str_starts_with($url, '//')) {
-    //         return redirect($url);
-    //     }
-
-    //     return redirect()->route('notifications.index');
-    // }
+        $url = $notification->data['url'] ?? null;
+        return $url ? redirect($url) : back();
+    }
 
     public function markAllAsRead()
     {

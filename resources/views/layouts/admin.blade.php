@@ -96,10 +96,10 @@
             <a href="{{ route('admin.tasks.index') }}" class="nav-link {{ request()->routeIs('admin.tasks.*') ? 'active' : '' }}">
                 <i class="bi bi-list-task"></i> Tasks
             </a>
-            <a href="#" class="nav-link">
+            <a href="{{ route('admin.assignments.index') }}" class="nav-link {{ request()->routeIs('admin.assignments.*') ? 'active' : '' }}">
                 <i class="bi bi-people"></i> Assignments
             </a>
-            <a href="#" class="nav-link">
+            <a href="{{ route('admin.transfers.index') }}" class="nav-link {{ request()->routeIs('admin.transfers.*') ? 'active' : '' }}">
                 <i class="bi bi-arrow-left-right"></i> Transfers
             </a>
             <a href="{{ route('admin.approvals.index') }}" class="nav-link {{ request()->routeIs('admin.approvals.*') ? 'active' : '' }}">

@@ -37,7 +37,12 @@ Route::prefix('admin')
         // Tasks
         Route::resource('tasks', AdminTaskController::class);
 
+        // Assignments
+        Route::get('/assignments', [App\Http\Controllers\Admin\AssignmentController::class, 'index'])->name('assignments.index');
+        Route::get('/assignments/{assignment}', [App\Http\Controllers\Admin\AssignmentController::class, 'show'])->name('assignments.show');
+
         // Transfers
+        Route::get('/transfers', [App\Http\Controllers\Admin\TransferHistoryController::class, 'index'])->name('transfers.index');
         Route::get('tasks/{task}/transfer', [AdminTransferController::class, 'create'])->name('transfers.create');
         Route::post('tasks/{task}/transfer', [AdminTransferController::class, 'store'])->name('transfers.store');
 
