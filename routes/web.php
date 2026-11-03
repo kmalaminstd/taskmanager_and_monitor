@@ -60,7 +60,7 @@ Route::prefix('admin')
         Route::get('/performance/{user}', [App\Http\Controllers\Admin\PerformanceController::class, 'show'])->name('performance.show');
 
         // Users
-        Route::resource('users', App\Http\Controllers\Admin\UserController::class)->except(['show']);
+        Route::resource('users', App\Http\Controllers\Admin\UserController::class);
         Route::post('/users/{user}/toggle-status', [App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle-status');
 
         // Reports

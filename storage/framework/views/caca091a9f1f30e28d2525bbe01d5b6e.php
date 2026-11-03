@@ -54,7 +54,10 @@
                     </td>
                     <td><?php echo e($user->created_at->format('M d, Y')); ?></td>
                     <td>
-                        <a href="<?php echo e(route('admin.users.edit', $user)); ?>" class="btn btn-sm btn-outline-primary">
+                        <a href="<?php echo e(route('admin.users.show', $user)); ?>" class="btn btn-sm btn-outline-primary" title="View Profile">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <a href="<?php echo e(route('admin.users.edit', $user)); ?>" class="btn btn-sm btn-outline-secondary" title="Edit">
                             <i class="bi bi-pencil"></i>
                         </a>
                         <form method="POST" action="<?php echo e(route('admin.users.toggle-status', $user)); ?>" class="d-inline">

@@ -59,6 +59,52 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
 
+
+    public function show(User $user)
+    {
+        // Assigned tasks stats
+        $assignedQuery = \App\Models\TaskAssignment::where('assignee_id', $user->id);
+
+        $assignedStats = [
+            'total' => (clone $assignedQuery)->count(),
+            'pending' => (clone $assignedQuery)->where('status', 'pending')->where('is_active', true)->count(),
+            'in_progress' => (clone $assignedQuery)->where('status', 'in_progress')->where('is_active', true)->count(),
+            'submitted' => (clone $assignedQuery)->where('status', 'submitted')->where('is_active', true)->count(),
+            'completed' => (clone $assignedQuery)->where('status', 'completed')->count(),
+            'returned' => (clone $assignedQuery)->where('status', 'returned')->where('is_active', true)->count(),
+            'overdue' => (clone $assignedQuery)->where('is_active', true)
+                ->whereNotIn('status', ['submitted', 'completed', 'cancelled'])
+                ->where('deadline', '<', now())->count(),
+            'cancelled' => (clone $assignedQuery)->where('status', 'cancelled')->count(),
+        ];
+
+        // Personal tasks stats
+        $personalQuery = \App\Models\PersonalTask::where('user_id', $user->id);
+        $personalStats = [
+            'total' => (clone $personalQuery)->count(),
+            'pending' => (clone $personalQuery)->where('status', 'pending')->count(),
+            'in_progress' => (clone $personalQuery)->where('status', 'in_progress')->count(),
+            'completed' => (clone $personalQuery)->where('status', 'completed')->count(),
+            'cancelled' => (clone $personalQuery)->where('status', 'cancelled')->count(),
+        ];
+
+        // Recent assigned tasks
+        $assignedTasks = \App\Models\TaskAssignment::with(['task.category', 'assignedBy'])
+            ->where('assignee_id', $user->id)
+            ->orderByDesc('assigned_at')
+            ->paginate(10, ['*'], 'assigned_page');
+
+        // Personal tasks
+        $personalTasks = \App\Models\PersonalTask::where('user_id', $user->id)
+            ->orderByRaw("CASE WHEN status = 'completed' THEN 1 ELSE 0 END")
+            ->orderBy('deadline')
+            ->paginate(10, ['*'], 'personal_page');
+
+        return view('admin.users.show', compact(
+            'user', 'assignedStats', 'personalStats', 'assignedTasks', 'personalTasks'
+        ));
+    }
+
     public function edit(User $user)
     {
         return view('admin.users.edit', compact('user'));

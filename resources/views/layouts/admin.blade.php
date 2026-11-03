@@ -20,49 +20,47 @@
             <small>Admin Panel</small>
         </div>
         <nav class="nav flex-column">
-            <div class="navbarLinksWrapper">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <i class="bi bi-speedometer2"></i> Dashboard
-                </a>
-                <a href="{{ route('admin.tasks.index') }}" class="nav-link {{ request()->routeIs('admin.tasks.*') ? 'active' : '' }}">
-                    <i class="bi bi-list-task"></i> Tasks
-                </a>
-                <a href="{{ route('admin.assignments.index') }}" class="nav-link {{ request()->routeIs('admin.assignments.*') ? 'active' : '' }}">
-                    <i class="bi bi-people"></i> Assignments
-                </a>
-                <a href="{{ route('admin.transfers.index') }}" class="nav-link {{ request()->routeIs('admin.transfers.*') ? 'active' : '' }}">
-                    <i class="bi bi-arrow-left-right"></i> Transfers
-                </a>
-                <a href="{{ route('admin.approvals.index') }}" class="nav-link {{ request()->routeIs('admin.approvals.*') ? 'active' : '' }}">
-                    <i class="bi bi-check2-circle"></i> Approvals
-                </a>
-                <a href="{{ route('calendar.index') }}" class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
-                    <i class="bi bi-calendar3"></i> Calendar
-                </a>
-                <a href="{{ route('admin.performance.index') }}" class="nav-link {{ request()->routeIs('admin.performance.*') ? 'active' : '' }}">
-                    <i class="bi bi-bar-chart"></i> Performance
-                </a>
-                <a href="{{ route('admin.reports.index') }}" class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
-                    <i class="bi bi-file-earmark-text"></i> Reports
-                </a>
-                <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                    <i class="bi bi-people-fill"></i> Users
-                </a>
-                <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-                    <i class="bi bi-gear"></i> Settings
-                </a>
-                <hr class="nav-divider">
-                <a href="{{ route('notifications.index') }}" class="nav-link {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
-                    <i class="bi bi-bell"></i> Notifications
-                    @if(auth()->user()->unreadNotifications->count())
-                        <span class="badge bg-danger rounded-pill ms-auto">{{ auth()->user()->unreadNotifications->count() }}</span>
-                    @endif
-                </a>
-                <a href="{{ route('logout') }}" class="nav-link"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="bi bi-box-arrow-left"></i> Logout
-                </a>
-            </div>
+            <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+            <a href="{{ route('admin.tasks.index') }}" class="nav-link {{ request()->routeIs('admin.tasks.*') ? 'active' : '' }}">
+                <i class="bi bi-list-task"></i> Tasks
+            </a>
+            <a href="{{ route('admin.assignments.index') }}" class="nav-link {{ request()->routeIs('admin.assignments.*') ? 'active' : '' }}">
+                <i class="bi bi-people"></i> Assignments
+            </a>
+            <a href="{{ route('admin.transfers.index') }}" class="nav-link {{ request()->routeIs('admin.transfers.*') ? 'active' : '' }}">
+                <i class="bi bi-arrow-left-right"></i> Transfers
+            </a>
+            <a href="{{ route('admin.approvals.index') }}" class="nav-link {{ request()->routeIs('admin.approvals.*') ? 'active' : '' }}">
+                <i class="bi bi-check2-circle"></i> Approvals
+            </a>
+            <a href="{{ route('calendar.index') }}" class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
+                <i class="bi bi-calendar3"></i> Calendar
+            </a>
+            <a href="{{ route('admin.performance.index') }}" class="nav-link {{ request()->routeIs('admin.performance.*') ? 'active' : '' }}">
+                <i class="bi bi-bar-chart"></i> Performance
+            </a>
+            <a href="{{ route('admin.reports.index') }}" class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                <i class="bi bi-file-earmark-text"></i> Reports
+            </a>
+            <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                <i class="bi bi-people-fill"></i> Users
+            </a>
+            <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                <i class="bi bi-gear"></i> Settings
+            </a>
+            <hr class="nav-divider">
+            <a href="{{ route('notifications.index') }}" class="nav-link {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
+                <i class="bi bi-bell"></i> Notifications
+                @if(auth()->user()->unreadNotifications->count())
+                    <span class="badge bg-danger rounded-pill ms-auto">{{ auth()->user()->unreadNotifications->count() }}</span>
+                @endif
+            </a>
+            <a href="{{ route('logout') }}" class="nav-link"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="bi bi-box-arrow-left"></i> Logout
+            </a>
         </nav>
     </aside>
 
