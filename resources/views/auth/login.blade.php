@@ -1,57 +1,366 @@
 @extends('layouts.auth')
 
-@section('title', 'Login')
+@section('title', 'Sign In | Task Master')
 
 @section('content')
-<div class="login-card">
-    <div class="login-header">
-        <h3 class="mb-1"><i class="bi bi-check2-square"></i> TASK MASTER</h3>
-        <p class="mb-0 opacity-75" style="font-size:0.9rem;">Task Management System</p>
-    </div>
-    <div class="p-4 p-md-5">
-        @if(session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-        @endif
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-            <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" name="email" id="email"
-                       class="form-control form-control-lg @error('email') is-invalid @enderror"
-                       value="{{ old('email') }}" required autofocus
-                       placeholder="you@example.com">
-                @error('email')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+<div class="auth-wrapper">
+
+    {{-- LEFT: BRANDING & DASHBOARD PREVIEW --}}
+    <div class="auth-showcase">
+
+        <div class="showcase-content">
+
+            <a href="#" class="brand-logo">
+                <span class="brand-icon">
+                    <i class="bi bi-check2-square"></i>
+                </span>
+                <span>TASK<span class="brand-highlight">MASTER</span></span>
+            </a>
+
+            <div class="showcase-heading">
+                <span class="eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    WORK SMARTER. ACHIEVE MORE.
+                </span>
+
+                <h1>
+                    Take control of
+                    <span>your team's work.</span>
+                </h1>
+
+                <p>
+                    Plan projects, manage tasks, monitor progress,
+                    and keep your entire team moving forward —
+                    all from one powerful workspace.
+                </p>
             </div>
 
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" id="password"
-                       class="form-control form-control-lg @error('password') is-invalid @enderror"
-                       required placeholder="••••••••">
-                @error('password')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+            {{-- Dashboard Preview --}}
+            <div class="preview-dashboard">
+
+                <div class="preview-topbar">
+                    <div>
+                        <span class="preview-label">WORKSPACE OVERVIEW</span>
+                        <h5>Project Dashboard</h5>
+                    </div>
+
+                    <span class="preview-live">
+                        <span></span> Live
+                    </span>
+                </div>
+
+                <div class="preview-stats">
+
+                    <div class="preview-stat">
+                        <div class="stat-icon blue">
+                            <i class="bi bi-list-task"></i>
+                        </div>
+                        <div>
+                            <span>Total Tasks</span>
+                            <h3>128</h3>
+                        </div>
+                    </div>
+
+                    <div class="preview-stat">
+                        <div class="stat-icon green">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div>
+                            <span>Completed</span>
+                            <h3>86</h3>
+                        </div>
+                    </div>
+
+                    <div class="preview-stat">
+                        <div class="stat-icon orange">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div>
+                            <span>In Progress</span>
+                            <h3>32</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="preview-project">
+
+                    <div class="project-heading">
+                        <div>
+                            <span>PROJECT PROGRESS</span>
+                            <h6>Website Development</h6>
+                        </div>
+                        <strong>78%</strong>
+                    </div>
+
+                    <div class="progress preview-progress">
+                        <div class="progress-bar" style="width: 78%"></div>
+                    </div>
+
+                    <div class="project-footer">
+                        <span><i class="bi bi-calendar3"></i> Due Nov 20</span>
+                        <span><i class="bi bi-people"></i> 6 Members</span>
+                    </div>
+
+                </div>
+
+                <div class="preview-activity">
+
+                    <div class="activity-heading">
+                        <h6>Recent Activity</h6>
+                        <span>Team Updates</span>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-avatar avatar-blue">R</div>
+                        <div class="activity-info">
+                            <p><strong>Rahim</strong> completed a task</p>
+                            <span>UI Design Implementation</span>
+                        </div>
+                        <span class="activity-time">2m ago</span>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-avatar avatar-purple">S</div>
+                        <div class="activity-info">
+                            <p><strong>Sarah</strong> updated a project</p>
+                            <span>Website Development</span>
+                        </div>
+                        <span class="activity-time">15m ago</span>
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="mb-4 form-check">
-                <input type="checkbox" name="remember" id="remember" class="form-check-input">
-                <label for="remember" class="form-check-label">Remember me</label>
+            <div class="showcase-footer">
+                <div class="footer-avatars">
+                    <span>A</span>
+                    <span>R</span>
+                    <span>S</span>
+                    <span>M</span>
+                </div>
+                <p>One workspace. One team. Better results.</p>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg w-100">
-                <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
-            </button>
-        </form>
-
-        <div class="mt-4 text-center text-muted" style="font-size:0.8rem;">
-            <p class="mb-1 fw-medium">Demo Accounts</p>
-            <p class="mb-0">Admin: admin@taskmaster.test / password</p>
-            <p class="mb-0">Supervisor: supervisor@taskmaster.test / password</p>
-            <p class="mb-0">Assignee: rahim@taskmaster.test / password</p>
         </div>
+
+        <div class="showcase-decoration decoration-one"></div>
+        <div class="showcase-decoration decoration-two"></div>
+
     </div>
+
+
+    {{-- RIGHT: LOGIN FORM --}}
+    <div class="auth-form-section">
+
+        <div class="auth-form-container">
+
+            <div class="mobile-brand">
+                <span class="brand-icon">
+                    <i class="bi bi-check2-square"></i>
+                </span>
+                <span>TASK<span class="brand-highlight">MASTER</span></span>
+            </div>
+
+            <div class="login-intro">
+
+                <span class="welcome-badge">
+                    <i class="bi bi-shield-lock"></i>
+                    SECURE ACCESS
+                </span>
+
+                <h2>Welcome back!</h2>
+
+                <p>Sign in to continue managing your workspace.</p>
+
+            </div>
+
+
+            {{-- Session Error --}}
+            @if(session('error'))
+                <div class="alert alert-danger auth-alert">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            {{-- Validation Errors --}}
+            @if($errors->any())
+                <div class="alert alert-danger auth-alert">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    Please check your login credentials and try again.
+                </div>
+            @endif
+
+
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+
+                {{-- Email --}}
+                <div class="form-group-custom">
+
+                    <label for="email">Email Address</label>
+
+                    <div class="input-wrapper">
+                        <i class="bi bi-envelope"></i>
+
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            class="form-control-custom @error('email') input-error @enderror"
+                            value="{{ old('email') }}"
+                            placeholder="name@company.com"
+                            required
+                            autofocus
+                            autocomplete="username"
+                        >
+                    </div>
+
+                    @error('email')
+                        <small class="field-error">{{ $message }}</small>
+                    @enderror
+
+                </div>
+
+
+                {{-- Password --}}
+                <div class="form-group-custom">
+
+                    <div class="password-label">
+                        <label for="password">Password</label>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <i class="bi bi-lock"></i>
+
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            class="form-control-custom @error('password') input-error @enderror"
+                            placeholder="Enter your password"
+                            required
+                            autocomplete="current-password"
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="togglePassword"
+                            aria-label="Show password"
+                        >
+                            <i class="bi bi-eye"></i>
+                        </button>
+
+                    </div>
+
+                    @error('password')
+                        <small class="field-error">{{ $message }}</small>
+                    @enderror
+
+                </div>
+
+
+                {{-- Remember --}}
+                <div class="login-options">
+
+                    <label class="remember-option">
+                        <input type="checkbox" name="remember" id="remember" value="1">
+                        <span class="custom-checkbox"></span>
+                        <span>Remember me</span>
+                    </label>
+
+                </div>
+
+
+                {{-- Submit --}}
+                <button type="submit" class="login-button">
+
+                    <span>Sign In to Workspace</span>
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+            </form>
+
+
+            {{-- Security Information --}}
+            <div class="security-note">
+                <i class="bi bi-shield-check"></i>
+                <span>Your workspace is protected with secure authentication.</span>
+            </div>
+
+
+            {{-- Demo Accounts (Local Environment Only) --}}
+            @env('local')
+                <div class="demo-accounts">
+
+                    <div class="demo-heading">
+                        <i class="bi bi-info-circle"></i>
+                        Development Demo Accounts
+                    </div>
+
+                    <div class="demo-account">
+                        <span>Admin</span>
+                        <code>admin@taskmaster.test</code>
+                    </div>
+
+                    <div class="demo-account">
+                        <span>Supervisor</span>
+                        <code>supervisor@taskmaster.test</code>
+                    </div>
+
+                    <div class="demo-account">
+                        <span>Assignee</span>
+                        <code>rahim@taskmaster.test</code>
+                    </div>
+
+                    <small>Password: password</small>
+
+                </div>
+            @endenv
+
+
+            <div class="auth-copyright">
+                &copy; {{ date('Y') }} Task Master. All rights reserved.
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
+
+
+{{-- Password Toggle --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const passwordInput = document.getElementById('password');
+        const toggleButton = document.getElementById('togglePassword');
+
+        toggleButton.addEventListener('click', function () {
+
+            const isPassword = passwordInput.type === 'password';
+
+            passwordInput.type = isPassword ? 'text' : 'password';
+
+            this.innerHTML = isPassword
+                ? '<i class="bi bi-eye-slash"></i>'
+                : '<i class="bi bi-eye"></i>';
+
+            this.setAttribute(
+                'aria-label',
+                isPassword ? 'Hide password' : 'Show password'
+            );
+
+        });
+
+    });
+</script>
+
 @endsection
