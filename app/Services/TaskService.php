@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use App\Notifications\TaskAssignedNotification;
-use App\Models\User;
+// use App\Models\User;
 
 class TaskService
 {
