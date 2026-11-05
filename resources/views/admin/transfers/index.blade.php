@@ -35,7 +35,7 @@
             </div>
 
             <!-- Filters -->
-            <div class="card-body border-bottom">
+            <div class="card-body border-bottom" style="overflow: scroll;">
                 <form method="GET" class="row g-2">
                     <div class="col-md-4">
                         <input type="text" name="search" class="form-control form-control-sm" placeholder="Search task..." value="{{ request('search') }}">
@@ -55,8 +55,8 @@
                 </form>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
+            <div class="table-responsive transfer-table-wrapper">
+                <table class="table table-hover mb-0 transfer-table">
                     <thead class="table-light">
                         <tr>
                             <th>Task</th>

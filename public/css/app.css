@@ -662,6 +662,36 @@ a:hover { text-decoration: none; }
     border-radius: 6px;
 }
 
+/* admin transfer page css  */
+.transfer-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.transfer-table {
+    min-width: 950px;
+    white-space: nowrap;
+    margin-bottom: 0;
+}
+
+.transfer-table th,
+.transfer-table td {
+    padding: 13px 16px;
+    vertical-align: middle;
+}
+
+.transfer-table th {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+}
+
+.transfer-table td {
+    font-size: 13px;
+}
+
 /* ========== List Group ========== */
 .list-group-item {
     border-color: var(--tm-border-light);
