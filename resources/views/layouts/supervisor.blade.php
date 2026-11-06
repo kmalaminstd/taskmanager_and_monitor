@@ -18,6 +18,11 @@
             <h5><i class="bi bi-check2-square"></i> TASK MASTER</h5>
             <small>Supervisor Panel</small>
         </div>
+        
+@php
+    $assistancePendingCount = \App\Models\TaskAssistanceRequest::whereIn('status', ['pending', 'accepted'])->count();
+@endphp
+
         <nav class="nav flex-column">
             <a href="{{ route('supervisor.dashboard') }}" class="nav-link {{ request()->routeIs('supervisor.dashboard') ? 'active' : '' }}">
                 <i class="bi bi-speedometer2"></i> Dashboard
@@ -30,7 +35,11 @@
             </a>
             <a href="{{ route('supervisor.assistance.index') }}" class="nav-link {{ request()->routeIs('supervisor.assistance.*') ? 'active' : '' }}">
                 <i class="bi bi-people"></i> Assistance
-            </a>
+            
+                @if($assistancePendingCount > 0)
+                    <span class="badge bg-danger rounded-pill ms-auto">{{ $assistancePendingCount }}</span>
+                @endif
+</a>
             <a href="{{ route('supervisor.team.index') }}" class="nav-link {{ request()->routeIs('supervisor.team.*') ? 'active' : '' }}">
                 <i class="bi bi-people"></i> Team
             </a>

@@ -18,6 +18,18 @@
             <h5><i class="bi bi-check2-square"></i> TASK MASTER</h5>
             <small>My Workspace</small>
         </div>
+@php
+    $assistanceIncoming = \App\Models\TaskAssistanceRequest::whereHas('users', function ($q) {
+        $q->where('user_id', auth()->id())->where('task_assistance_users.status', 'pending');
+    })->count();
+    $assistanceReview = \App\Models\TaskAssistanceRequest::where('requester_id', auth()->id())
+        ->whereHas('users', fn ($u) => $u->where('task_assistance_users.status', 'submitted'))
+        ->count();
+    $assistanceBadge = $assistanceIncoming + $assistanceReview;
+    $personalPending = \App\Models\PersonalTask::where('user_id', auth()->id())
+        ->whereIn('status', ['pending', 'in_progress'])
+        ->count();
+@endphp
         <nav class="nav flex-column">
             <a href="{{ route('assignee.dashboard') }}" class="nav-link {{ request()->routeIs('assignee.dashboard') ? 'active' : '' }}">
                 <i class="bi bi-speedometer2"></i> Dashboard
@@ -27,9 +39,15 @@
             </a>
             <a href="{{ route('assignee.personal-tasks.index') }}" class="nav-link {{ request()->routeIs('assignee.personal-tasks.*') ? 'active' : '' }}">
                 <i class="bi bi-journal-plus"></i> Personal Tasks
+                @if($personalPending > 0)
+                    <span class="badge bg-danger rounded-pill ms-auto">{{ $personalPending }}</span>
+                @endif
             </a>
             <a href="{{ route('assignee.assistance.index') }}" class="nav-link {{ request()->routeIs('assignee.assistance.*') ? 'active' : '' }}">
                 <i class="bi bi-people"></i> Assistance
+                @if($assistanceBadge > 0)
+                    <span class="badge bg-danger rounded-pill ms-auto">{{ $assistanceBadge }}</span>
+                @endif
             </a>
             <a href="{{ route('calendar.index') }}" class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
                 <i class="bi bi-calendar3"></i> Calendar
@@ -108,6 +126,7 @@
 
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.getElementById('sidebarToggle')?.addEventListener('click', () => {

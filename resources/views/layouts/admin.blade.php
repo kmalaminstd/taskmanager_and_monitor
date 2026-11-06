@@ -19,6 +19,11 @@
             <h5><i class="bi bi-check2-square"></i> TASK MASTER</h5>
             <small>Admin Panel</small>
         </div>
+        
+@php
+    $assistancePendingCount = \App\Models\TaskAssistanceRequest::whereIn('status', ['pending', 'accepted'])->count();
+@endphp
+
         <nav class="nav flex-column">
             <div>
 
@@ -39,7 +44,11 @@
                 </a>
             <a href="{{ route('admin.assistance.index') }}" class="nav-link {{ request()->routeIs('admin.assistance.*') ? 'active' : '' }}">
                 <i class="bi bi-people"></i> Assistance
-            </a>
+            
+                @if($assistancePendingCount > 0)
+                    <span class="badge bg-danger rounded-pill ms-auto">{{ $assistancePendingCount }}</span>
+                @endif
+</a>
                 <a href="{{ route('calendar.index') }}" class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar3"></i> Calendar
                 </a>

@@ -35,7 +35,7 @@ class TaskAssistanceRequest extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'task_assistance_users', 'assistance_request_id', 'user_id')
-                    ->withPivot('status')
-                    ->withTimestamps();
+            ->withPivot(['status', 'helper_note', 'requester_note', 'submitted_at', 'responded_at'])
+            ->withTimestamps();
     }
 }

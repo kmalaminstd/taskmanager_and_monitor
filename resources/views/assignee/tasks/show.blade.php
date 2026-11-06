@@ -224,12 +224,12 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Select Team Members <span class="text-danger">*</span></label>
-                        <select name="helper_ids[]" class="form-select" multiple size="6" required>
+                        <select name="helper_ids[]" id="helperSelect" class="form-select select2-helpers" multiple required style="width:100%;">
                             @foreach(\App\Models\User::whereIn('role',['assignee','supervisor'])->where('status','active')->where('id','!=',auth()->id())->orderBy('name')->get() as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->role }})</option>
                             @endforeach
                         </select>
-                        <div class="form-text">Hold Ctrl/Cmd to select one or more people.</div>
+                        <div class="form-text">Search and select one or more team members.</div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">What do you need help with? <span class="text-danger">*</span></label>
@@ -244,5 +244,35 @@
         </form>
     </div>
 </div>
+
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+<style>
+.select2-container--bootstrap-5 .select2-selection { min-height: 38px; }
+</style>
+@endpush
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('assistanceModal');
+    if (!modal) return;
+    modal.addEventListener('shown.bs.modal', function () {
+        const $el = $('#helperSelect');
+        if ($el.length && !$el.hasClass('select2-hidden-accessible')) {
+            $el.select2({
+                theme: 'bootstrap-5',
+                placeholder: 'Search team members...',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#assistanceModal')
+            });
+        }
+    });
+});
+</script>
+@endpush
 
 @endsection

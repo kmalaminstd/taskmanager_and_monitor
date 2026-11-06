@@ -101,6 +101,11 @@ Route::prefix('assignee')
         Route::get('/assistance', [App\Http\Controllers\Assignee\AssistanceController::class, 'index'])->name('assistance.index');
         Route::get('/assistance/{assistance}', [App\Http\Controllers\Assignee\AssistanceController::class, 'show'])->name('assistance.show');
         Route::post('/assistance/{assistance}/respond', [App\Http\Controllers\Assignee\AssistanceController::class, 'respond'])->name('assistance.respond');
+        Route::post('/assistance/{assistance}/submit-work', [App\Http\Controllers\Assignee\AssistanceController::class, 'submitWork'])->name('assistance.submit-work');
+        Route::post('/assistance/{assistance}/helpers/{userId}/approve', [App\Http\Controllers\Assignee\AssistanceController::class, 'approveHelper'])->name('assistance.approve-helper');
+        Route::post('/assistance/{assistance}/helpers/{userId}/reject', [App\Http\Controllers\Assignee\AssistanceController::class, 'rejectHelper'])->name('assistance.reject-helper');
+        Route::post('/assistance/{assistance}/helpers/{userId}/remove', [App\Http\Controllers\Assignee\AssistanceController::class, 'removeHelper'])->name('assistance.remove-helper');
+        Route::post('/assistance/{assistance}/cancel', [App\Http\Controllers\Assignee\AssistanceController::class, 'cancel'])->name('assistance.cancel');
         Route::post('/assistance/{assistance}/complete', [App\Http\Controllers\Assignee\AssistanceController::class, 'complete'])->name('assistance.complete');
 
         // Personal Tasks
