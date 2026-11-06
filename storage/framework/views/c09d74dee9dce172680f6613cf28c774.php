@@ -128,7 +128,7 @@ endif;
 unset($__errorArgs, $__bag); ?>" multiple size="6" required>
                             <?php $__currentLoopData = $assignees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <option value="<?php echo e($user->id); ?>" <?php if(collect(old('assignee_ids', []))->contains($user->id)): echo 'selected'; endif; ?>>
-                                    <?php echo e($user->name); ?> (<?php echo e($user->email); ?>)
+                                    <?php echo e($user->name); ?><?php if(isset($workloads[$user->id])): ?> — <?php echo e($workloads[$user->id]['active_tasks']); ?> active (<?php echo e($workloads[$user->id]['label']); ?>)<?php endif; ?>
                                 </option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>

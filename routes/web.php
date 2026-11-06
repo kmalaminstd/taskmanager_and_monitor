@@ -61,6 +61,9 @@ Route::prefix('admin')
         Route::post('/approvals/transfers/{transfer}/reject', [AdminApprovalController::class, 'rejectTransfer'])->name('approvals.transfers.reject');
 
         // Performance
+        Route::get('/workload', [App\Http\Controllers\Admin\WorkloadController::class, 'index'])->name('workload.index');
+        Route::get('/workload/{user}', [App\Http\Controllers\Admin\WorkloadController::class, 'show'])->name('workload.show');
+
         Route::get('/performance', [App\Http\Controllers\Admin\PerformanceController::class, 'index'])->name('performance.index');
         Route::get('/performance/{user}', [App\Http\Controllers\Admin\PerformanceController::class, 'show'])->name('performance.show');
 
@@ -153,6 +156,20 @@ Route::prefix('supervisor')
         Route::get('/performance', [App\Http\Controllers\Supervisor\PerformanceController::class, 'index'])->name('performance.index');
         Route::get('/performance/{user}', [App\Http\Controllers\Supervisor\PerformanceController::class, 'show'])->name('performance.show');
     });
+
+
+// Task comments & subtasks (auth users)
+Route::middleware(['auth', 'active'])->group(function () {
+    Route::post('/tasks/{task}/comments', [App\Http\Controllers\TaskCommentController::class, 'store'])->name('tasks.comments.store');
+    Route::put('/comments/{note}', [App\Http\Controllers\TaskCommentController::class, 'update'])->name('tasks.comments.update');
+    Route::delete('/comments/{note}', [App\Http\Controllers\TaskCommentController::class, 'destroy'])->name('tasks.comments.destroy');
+    Route::post('/comments/{note}/pin', [App\Http\Controllers\TaskCommentController::class, 'pin'])->name('tasks.comments.pin');
+
+    Route::post('/tasks/{task}/subtasks', [App\Http\Controllers\TaskSubtaskController::class, 'store'])->name('tasks.subtasks.store');
+    Route::put('/subtasks/{subtask}', [App\Http\Controllers\TaskSubtaskController::class, 'update'])->name('tasks.subtasks.update');
+    Route::post('/subtasks/{subtask}/toggle', [App\Http\Controllers\TaskSubtaskController::class, 'toggleComplete'])->name('tasks.subtasks.toggle');
+    Route::delete('/subtasks/{subtask}', [App\Http\Controllers\TaskSubtaskController::class, 'destroy'])->name('tasks.subtasks.destroy');
+});
 
 // Notifications (both roles)
 Route::middleware(['auth', 'active'])->group(function () {

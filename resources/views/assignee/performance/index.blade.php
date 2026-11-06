@@ -4,6 +4,7 @@
 @section('page-title', 'My Performance')
 
 @section('content')
+@include('components.period-filter', ['period' => $period ?? request('period')])
 <form method="GET" class="row g-2 mb-4">
     <div class="col-auto">
         <input type="date" name="from" class="form-control form-control-sm" value="{{ $from?->format('Y-m-d') }}">
@@ -20,7 +21,7 @@
     <div class="col-6 col-md-3">
         <div class="stat-card text-center">
             <div class="text-muted small">Total Tasks</div>
-            <div class="fs-2 fw-bold">{{ $stats['total'] }}</div>
+            <div class="fs-2 fw-bold">{{ $stats['assigned'] ?? $stats['total'] }}</div>
         </div>
     </div>
     <div class="col-6 col-md-3">

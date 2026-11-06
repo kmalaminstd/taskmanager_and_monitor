@@ -161,6 +161,17 @@
         <?php endif; ?>
     </div>
 </div>
+
+
+
+
+<div class="row mt-4">
+    <div class="col-12">
+        <?php echo $__env->make('components.task-subtasks', ['task' => $task], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        <?php echo $__env->make('components.task-discussion', ['task' => $task], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    </div>
+</div>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /mnt/newvolume5/TaskMasterTest/TaskManager Main/taskmaster main/resources/views/admin/tasks/show.blade.php ENDPATH**/ ?>

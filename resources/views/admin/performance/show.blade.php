@@ -4,6 +4,7 @@
 @section('page-title', $user->name . ' - Performance')
 
 @section('content')
+@include('components.period-filter', ['period' => $period ?? request('period')])
 <div class="mb-3">
     <a href="{{ route('admin.performance.index') }}" class="btn btn-outline-secondary btn-sm">
         <i class="bi bi-arrow-left"></i> Back to Performance
@@ -29,7 +30,7 @@
     <div class="col-6 col-md-3">
         <div class="stat-card text-center">
             <div class="text-muted small">Total Assignments</div>
-            <div class="fs-3 fw-bold">{{ $stats['total'] }}</div>
+            <div class="fs-3 fw-bold">{{ $stats['assigned'] ?? $stats['total'] }}</div>
         </div>
     </div>
     <div class="col-6 col-md-3">

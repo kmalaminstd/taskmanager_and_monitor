@@ -74,7 +74,7 @@
                         <select name="assignee_ids[]" class="form-select @error('assignee_ids') is-invalid @enderror" multiple size="6" required>
                             @foreach($assignees as $user)
                                 <option value="{{ $user->id }}" @selected(collect(old('assignee_ids', []))->contains($user->id))>
-                                    {{ $user->name }} ({{ $user->email }})
+                                    {{ $user->name }}@if(isset($workloads[$user->id])) — {{ $workloads[$user->id]['active_tasks'] }} active ({{ $workloads[$user->id]['label'] }})@endif ({{ $user->email }})
                                 </option>
                             @endforeach
                         </select>

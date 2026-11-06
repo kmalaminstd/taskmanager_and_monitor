@@ -10,6 +10,7 @@ use App\Models\TaskAssignment;
 use App\Models\TaskCategory;
 use App\Models\User;
 use App\Services\TaskService;
+use App\Services\WorkloadService;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -31,12 +32,13 @@ class TaskController extends Controller
         return view('admin.tasks.index', compact('assignments', 'assignees', 'categories', 'filters'));
     }
 
-    public function create()
+    public function create(WorkloadService $workloadService)
     {
         $assignees = User::where('role', 'assignee')->where('status', 'active')->orderBy('name')->get();
         $categories = TaskCategory::orderBy('name')->get();
 
-        return view('admin.tasks.create', compact('assignees', 'categories'));
+        $workloads = $workloadService->forAllAssignees()->keyBy(fn ($w) => $w['user']->id);
+        return view('admin.tasks.create', compact('assignees', 'categories', 'workloads'));
     }
 
     public function store(StoreTaskRequest $request)

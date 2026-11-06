@@ -52,6 +52,9 @@
                 <a href="{{ route('calendar.index') }}" class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar3"></i> Calendar
                 </a>
+                <a href="{{ route('admin.workload.index') }}" class="nav-link {{ request()->routeIs('admin.workload.*') ? 'active' : '' }}">
+                    <i class="bi bi-speedometer"></i> Workload
+                </a>
                 <a href="{{ route('admin.performance.index') }}" class="nav-link {{ request()->routeIs('admin.performance.*') ? 'active' : '' }}">
                     <i class="bi bi-bar-chart"></i> Performance
                 </a>

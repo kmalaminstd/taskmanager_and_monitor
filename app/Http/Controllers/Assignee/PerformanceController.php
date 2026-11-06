@@ -4,21 +4,29 @@ namespace App\Http\Controllers\Assignee;
 
 use App\Http\Controllers\Controller;
 use App\Services\PerformanceService;
+use App\Services\WorkloadService;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
 class PerformanceController extends Controller
 {
-    public function __construct(protected PerformanceService $performanceService) {}
+    public function __construct(
+        protected PerformanceService $performanceService,
+        protected WorkloadService $workloadService
+    ) {}
 
     public function index(Request $request)
     {
-        $from = $request->filled('from') ? Carbon::parse($request->from)->startOfDay() : null;
-        $to = $request->filled('to') ? Carbon::parse($request->to)->endOfDay() : null;
+        $period = $request->get('period', 'this_month');
+        [$from, $to] = $this->performanceService->resolvePeriod(
+            $period,
+            $request->get('from'),
+            $request->get('to')
+        );
 
         $stats = $this->performanceService->getUserPerformance(auth()->id(), $from, $to);
         $chartData = $this->performanceService->getChartData(auth()->id());
+        $workload = $this->workloadService->forUser(auth()->user());
 
-        return view('assignee.performance.index', compact('stats', 'chartData', 'from', 'to'));
+        return view('assignee.performance.index', compact('stats', 'chartData', 'from', 'to', 'period', 'workload'));
     }
 }

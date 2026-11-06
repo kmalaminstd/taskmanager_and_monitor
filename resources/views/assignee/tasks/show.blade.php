@@ -275,4 +275,15 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 @endpush
 
+
+{{-- Checklist & Discussion --}}
+@if(isset($assignment) && $assignment->task)
+<div class="row mt-4">
+    <div class="col-12">
+        @include('components.task-subtasks', ['task' => $assignment->task])
+        @include('components.task-discussion', ['task' => $assignment->task])
+    </div>
+</div>
+@endif
+
 @endsection

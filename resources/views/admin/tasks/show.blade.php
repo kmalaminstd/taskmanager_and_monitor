@@ -155,4 +155,15 @@
         @endif
     </div>
 </div>
+
+
+
+{{-- Checklist & Discussion --}}
+<div class="row mt-4">
+    <div class="col-12">
+        @include('components.task-subtasks', ['task' => $task])
+        @include('components.task-discussion', ['task' => $task])
+    </div>
+</div>
+
 @endsection

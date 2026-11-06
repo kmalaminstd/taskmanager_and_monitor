@@ -71,4 +71,18 @@ class Task extends Model
     {
         return $this->hasMany(TaskAssistanceRequest::class);
     }
+
+    public function subtasks()
+    {
+        return $this->hasMany(TaskSubtask::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function subtaskProgress(): array
+    {
+        $total = $this->subtasks()->where('status', '!=', 'cancelled')->count();
+        $completed = $this->subtasks()->where('status', 'completed')->count();
+        $percent = $total > 0 ? round(($completed / $total) * 100) : 0;
+        return compact('total', 'completed', 'percent');
+    }
+
 }

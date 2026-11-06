@@ -279,6 +279,17 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 <?php $__env->stopPush(); ?>
 
+
+
+<?php if(isset($assignment) && $assignment->task): ?>
+<div class="row mt-4">
+    <div class="col-12">
+        <?php echo $__env->make('components.task-subtasks', ['task' => $assignment->task], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        <?php echo $__env->make('components.task-discussion', ['task' => $assignment->task], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    </div>
+</div>
+<?php endif; ?>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.assignee', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /mnt/newvolume5/TaskMasterTest/TaskManager Main/taskmaster main/resources/views/assignee/tasks/show.blade.php ENDPATH**/ ?>

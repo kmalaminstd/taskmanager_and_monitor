@@ -4,6 +4,7 @@
 @section('page-title', 'Performance Monitoring')
 
 @section('content')
+@include('components.period-filter', ['period' => $period ?? request('period')])
 <!-- Filters -->
 <form method="GET" class="row g-2 mb-4">
     <div class="col-auto">
@@ -23,7 +24,7 @@
     <div class="col-6 col-md-3">
         <div class="stat-card">
             <div class="text-muted small">Total Assignments</div>
-            <div class="fs-3 fw-bold">{{ $overall['total'] }}</div>
+            <div class="fs-3 fw-bold">{{ $overall['assigned'] ?? $overall['total'] }}</div>
         </div>
     </div>
     <div class="col-6 col-md-3">
