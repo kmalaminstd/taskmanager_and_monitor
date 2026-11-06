@@ -75,6 +75,11 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#transferModal">
                         <i class="bi bi-arrow-left-right"></i> Request Transfer
                     </button>
+
+                    <button type="button" class="btn btn-outline-info me-1" data-bs-toggle="modal" data-bs-target="#assistanceModal">
+                        <i class="bi bi-people"></i> Request Assistance
+                    </button>
+
                 @endif
 
                 @if($assignment->status === 'submitted')
@@ -199,6 +204,41 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Submit Transfer Request</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Assistance Modal -->
+<div class="modal fade" id="assistanceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('assignee.tasks.request-assistance', $assignment) }}">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Request Assistance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Select Team Members <span class="text-danger">*</span></label>
+                        <select name="helper_ids[]" class="form-select" multiple size="6" required>
+                            @foreach(\App\Models\User::whereIn('role',['assignee','supervisor'])->where('status','active')->where('id','!=',auth()->id())->orderBy('name')->get() as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->role }})</option>
+                            @endforeach
+                        </select>
+                        <div class="form-text">Hold Ctrl/Cmd to select one or more people.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">What do you need help with? <span class="text-danger">*</span></label>
+                        <textarea name="description" class="form-control" rows="4" required placeholder="Describe the help you need..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info text-white">Send Request</button>
                 </div>
             </div>
         </form>

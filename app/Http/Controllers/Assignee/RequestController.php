@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\TaskAssignment;
 use App\Models\TaskExtensionRequest;
 use App\Models\TaskTransferRequest;
-use App\Models\User;
+use App\Models\TaskAssistanceRequest;
 use App\Models\TaskHistory;
+use App\Models\User;
+use App\Notifications\TaskStatusNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RequestController extends Controller
 {
@@ -21,7 +24,6 @@ class RequestController extends Controller
             'reason' => ['required', 'string', 'max:1000'],
         ]);
 
-        // Prevent duplicate pending requests
         $exists = TaskExtensionRequest::where('task_assignment_id', $assignment->id)
             ->where('status', 'pending')
             ->exists();
@@ -59,7 +61,7 @@ class RequestController extends Controller
             'reason' => ['required', 'string', 'max:1000'],
         ]);
 
-        if ($data['requested_new_assignee_id'] == auth()->id()) {
+        if ((int) $data['requested_new_assignee_id'] === (int) auth()->id()) {
             return back()->with('error', 'You cannot transfer a task to yourself.');
         }
 
@@ -90,9 +92,83 @@ class RequestController extends Controller
         return back()->with('success', 'Transfer request submitted. Waiting for admin approval.');
     }
 
+    public function requestAssistance(Request $request, TaskAssignment $assignment)
+    {
+        $this->authorizeAssignment($assignment);
+
+        $data = $request->validate([
+            'helper_ids' => ['required', 'array', 'min:1'],
+            'helper_ids.*' => ['exists:users,id'],
+            'description' => ['required', 'string', 'max:2000'],
+        ]);
+
+        $helperIds = array_values(array_unique(array_map('intval', $data['helper_ids'])));
+        $helperIds = array_values(array_filter($helperIds, fn ($id) => $id !== (int) auth()->id()));
+
+        if (empty($helperIds)) {
+            return back()->with('error', 'Please select at least one other team member.');
+        }
+
+        $validHelpers = User::whereIn('id', $helperIds)
+            ->whereIn('role', ['assignee', 'supervisor'])
+            ->where('status', 'active')
+            ->pluck('id')
+            ->all();
+
+        if (empty($validHelpers)) {
+            return back()->with('error', 'Selected helpers are not valid.');
+        }
+
+        DB::transaction(function () use ($assignment, $validHelpers, $data) {
+            $assistance = TaskAssistanceRequest::create([
+                'task_id' => $assignment->task_id,
+                'task_assignment_id' => $assignment->id,
+                'requester_id' => auth()->id(),
+                'description' => $data['description'],
+                'status' => 'pending',
+            ]);
+
+            foreach ($validHelpers as $helperId) {
+                $assistance->users()->attach($helperId, ['status' => 'pending']);
+            }
+
+            TaskHistory::create([
+                'task_id' => $assignment->task_id,
+                'task_assignment_id' => $assignment->id,
+                'user_id' => auth()->id(),
+                'action' => 'assistance_requested',
+                'description' => 'Assistance requested from ' . count($validHelpers) . ' member(s)',
+            ]);
+
+            $taskTitle = $assignment->task->title ?? 'a task';
+            foreach (User::whereIn('id', $validHelpers)->get() as $helper) {
+                $helper->notify(new TaskStatusNotification(
+                    'Assistance Requested',
+                    auth()->user()->name . ' asked for your help on: ' . $taskTitle,
+                    route('assignee.assistance.show', $assistance->id),
+                    'assistance'
+                ));
+            }
+
+            foreach (User::whereIn('role', ['admin', 'supervisor'])->where('status', 'active')->get() as $monitor) {
+                $url = $monitor->role === 'admin'
+                    ? route('admin.assistance.index')
+                    : route('supervisor.assistance.index');
+                $monitor->notify(new TaskStatusNotification(
+                    'New Assistance Request',
+                    auth()->user()->name . ' requested help on: ' . $taskTitle,
+                    $url,
+                    'assistance'
+                ));
+            }
+        });
+
+        return back()->with('success', 'Assistance request sent to selected team members.');
+    }
+
     protected function authorizeAssignment(TaskAssignment $assignment): void
     {
-        if ($assignment->assignee_id !== auth()->id() || !$assignment->is_active) {
+        if ($assignment->assignee_id !== auth()->id() || ! $assignment->is_active) {
             abort(403);
         }
     }

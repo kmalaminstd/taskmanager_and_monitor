@@ -28,6 +28,9 @@
             <a href="{{ route('supervisor.approvals.index') }}" class="nav-link {{ request()->routeIs('supervisor.approvals.*') ? 'active' : '' }}">
                 <i class="bi bi-check2-circle"></i> Approvals
             </a>
+            <a href="{{ route('supervisor.assistance.index') }}" class="nav-link {{ request()->routeIs('supervisor.assistance.*') ? 'active' : '' }}">
+                <i class="bi bi-people"></i> Assistance
+            </a>
             <a href="{{ route('supervisor.team.index') }}" class="nav-link {{ request()->routeIs('supervisor.team.*') ? 'active' : '' }}">
                 <i class="bi bi-people"></i> Team
             </a>

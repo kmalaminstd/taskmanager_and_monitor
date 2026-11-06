@@ -37,6 +37,9 @@
                 <a href="{{ route('admin.approvals.index') }}" class="nav-link {{ request()->routeIs('admin.approvals.*') ? 'active' : '' }}">
                     <i class="bi bi-check2-circle"></i> Approvals
                 </a>
+            <a href="{{ route('admin.assistance.index') }}" class="nav-link {{ request()->routeIs('admin.assistance.*') ? 'active' : '' }}">
+                <i class="bi bi-people"></i> Assistance
+            </a>
                 <a href="{{ route('calendar.index') }}" class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar3"></i> Calendar
                 </a>

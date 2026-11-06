@@ -37,6 +37,9 @@
                 <a href="<?php echo e(route('admin.approvals.index')); ?>" class="nav-link <?php echo e(request()->routeIs('admin.approvals.*') ? 'active' : ''); ?>">
                     <i class="bi bi-check2-circle"></i> Approvals
                 </a>
+            <a href="<?php echo e(route('admin.assistance.index')); ?>" class="nav-link <?php echo e(request()->routeIs('admin.assistance.*') ? 'active' : ''); ?>">
+                <i class="bi bi-people"></i> Assistance
+            </a>
                 <a href="<?php echo e(route('calendar.index')); ?>" class="nav-link <?php echo e(request()->routeIs('calendar.*') ? 'active' : ''); ?>">
                     <i class="bi bi-calendar3"></i> Calendar
                 </a>

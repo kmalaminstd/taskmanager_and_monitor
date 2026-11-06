@@ -28,6 +28,9 @@
             <a href="{{ route('assignee.personal-tasks.index') }}" class="nav-link {{ request()->routeIs('assignee.personal-tasks.*') ? 'active' : '' }}">
                 <i class="bi bi-journal-plus"></i> Personal Tasks
             </a>
+            <a href="{{ route('assignee.assistance.index') }}" class="nav-link {{ request()->routeIs('assignee.assistance.*') ? 'active' : '' }}">
+                <i class="bi bi-people"></i> Assistance
+            </a>
             <a href="{{ route('calendar.index') }}" class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
                 <i class="bi bi-calendar3"></i> Calendar
             </a>

@@ -68,6 +68,9 @@ Route::prefix('admin')
         Route::resource('users', App\Http\Controllers\Admin\UserController::class);
         Route::post('/users/{user}/toggle-status', [App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle-status');
 
+        Route::get('/assistance', [App\Http\Controllers\Admin\AssistanceController::class, 'index'])->name('assistance.index');
+        Route::get('/assistance/{assistance}', [App\Http\Controllers\Admin\AssistanceController::class, 'show'])->name('assistance.show');
+
         // Reports
         Route::get('/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/generate', [App\Http\Controllers\Admin\ReportController::class, 'generate'])->name('reports.generate');
@@ -93,6 +96,12 @@ Route::prefix('assignee')
         // Requests
         Route::post('/tasks/{assignment}/request-extension', [AssigneeRequestController::class, 'requestExtension'])->name('tasks.request-extension');
         Route::post('/tasks/{assignment}/request-transfer', [AssigneeRequestController::class, 'requestTransfer'])->name('tasks.request-transfer');
+        Route::post('/tasks/{assignment}/request-assistance', [AssigneeRequestController::class, 'requestAssistance'])->name('tasks.request-assistance');
+
+        Route::get('/assistance', [App\Http\Controllers\Assignee\AssistanceController::class, 'index'])->name('assistance.index');
+        Route::get('/assistance/{assistance}', [App\Http\Controllers\Assignee\AssistanceController::class, 'show'])->name('assistance.show');
+        Route::post('/assistance/{assistance}/respond', [App\Http\Controllers\Assignee\AssistanceController::class, 'respond'])->name('assistance.respond');
+        Route::post('/assistance/{assistance}/complete', [App\Http\Controllers\Assignee\AssistanceController::class, 'complete'])->name('assistance.complete');
 
         // Personal Tasks
         Route::get('/personal-tasks', [App\Http\Controllers\Assignee\PersonalTaskController::class, 'index'])->name('personal-tasks.index');
@@ -132,6 +141,9 @@ Route::prefix('supervisor')
 
         Route::get('/team', [App\Http\Controllers\Supervisor\TeamController::class, 'index'])->name('team.index');
         Route::get('/team/{user}', [App\Http\Controllers\Supervisor\TeamController::class, 'show'])->name('team.show');
+
+        Route::get('/assistance', [App\Http\Controllers\Supervisor\AssistanceController::class, 'index'])->name('assistance.index');
+        Route::get('/assistance/{assistance}', [App\Http\Controllers\Supervisor\AssistanceController::class, 'show'])->name('assistance.show');
 
         Route::get('/performance', [App\Http\Controllers\Supervisor\PerformanceController::class, 'index'])->name('performance.index');
         Route::get('/performance/{user}', [App\Http\Controllers\Supervisor\PerformanceController::class, 'show'])->name('performance.show');
