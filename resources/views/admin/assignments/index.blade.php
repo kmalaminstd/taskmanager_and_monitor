@@ -147,7 +147,7 @@
         </table>
     </div>
     @if($assignments->hasPages())
-    <div class="card-footer bg-white">{{ $assignments->links() }}</div>
+    <div class="card-footer bg-white">{{ $assignments->links('vendor.pagination.bootstrap-5') }}</div>
     @endif
 </div>
 @endsection

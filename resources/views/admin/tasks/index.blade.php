@@ -124,7 +124,7 @@
     </div>
     @if($assignments->hasPages())
     <div class="card-footer bg-white">
-        {{ $assignments->links() }}
+        {{ $assignments->links('vendor.pagination.bootstrap-5') }}
     </div>
     @endif
 </div>

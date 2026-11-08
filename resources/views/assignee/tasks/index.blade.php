@@ -67,7 +67,7 @@
 
 @if($assignments->hasPages())
 <div class="mt-4">
-    {{ $assignments->links() }}
+    {{ $assignments->links('vendor.pagination.bootstrap-5') }}
 </div>
 @endif
 @endsection

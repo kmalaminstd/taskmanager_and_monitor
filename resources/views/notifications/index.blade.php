@@ -54,7 +54,7 @@
         @endforelse
     </ul>
     @if($notifications->hasPages())
-    <div class="card-footer bg-white">{{ $notifications->links() }}</div>
+    <div class="card-footer bg-white">{{ $notifications->links('vendor.pagination.bootstrap-5') }}</div>
     @endif
 </div>
 @endsection

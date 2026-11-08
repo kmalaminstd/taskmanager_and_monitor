@@ -53,7 +53,7 @@
         <?php endif; ?>
     </ul>
     <?php if($notifications->hasPages()): ?>
-    <div class="card-footer bg-white"><?php echo e($notifications->links()); ?></div>
+    <div class="card-footer bg-white"><?php echo e($notifications->links('vendor.pagination.bootstrap-5')); ?></div>
     <?php endif; ?>
 </div>
 <?php $__env->stopSection(); ?>

@@ -68,6 +68,6 @@
 </div>
 
 @if($tasks->hasPages())
-<div class="mt-4">{{ $tasks->links() }}</div>
+<div class="mt-4">{{ $tasks->links('vendor.pagination.bootstrap-5') }}</div>
 @endif
 @endsection

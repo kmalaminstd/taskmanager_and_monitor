@@ -61,7 +61,7 @@
         </table>
     </div>
     @if($members->hasPages())
-    <div class="card-footer bg-white">{{ $members->links() }}</div>
+    <div class="card-footer bg-white">{{ $members->links('vendor.pagination.bootstrap-5') }}</div>
     @endif
 </div>
 @endsection

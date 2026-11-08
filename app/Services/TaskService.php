@@ -194,6 +194,7 @@ class TaskService
             $query->orderBy($sort, $direction);
         } else {
             $query->orderBy('deadline', 'asc');
+            // $query->latest();
         }
 
         return $query->paginate($filters['per_page'] ?? 15)->withQueryString();

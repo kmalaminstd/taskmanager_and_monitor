@@ -126,7 +126,7 @@
     </div>
     <?php if($assignments->hasPages()): ?>
     <div class="card-footer bg-white">
-        <?php echo e($assignments->links()); ?>
+        <?php echo e($assignments->links('vendor.pagination.bootstrap-5')); ?>
 
     </div>
     <?php endif; ?>

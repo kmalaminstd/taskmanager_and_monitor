@@ -100,7 +100,7 @@
                 </table>
             </div>
             @if($transfers->hasPages())
-            <div class="card-footer bg-white">{{ $transfers->links() }}</div>
+            <div class="card-footer bg-white">{{ $transfers->links('vendor.pagination.bootstrap-5') }}</div>
             @endif
         </div>
     </div>
