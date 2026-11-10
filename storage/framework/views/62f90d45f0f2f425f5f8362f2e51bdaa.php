@@ -70,7 +70,7 @@
 
 <?php if($assignments->hasPages()): ?>
 <div class="mt-4">
-    <?php echo e($assignments->links()); ?>
+    <?php echo e($assignments->links('vendor.pagination.bootstrap-5')); ?>
 
 </div>
 <?php endif; ?>

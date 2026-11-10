@@ -61,7 +61,7 @@
             <?php if(isset($note->attachments) && $note->attachments->count()): ?>
             <div class="mt-2">
                 <?php $__currentLoopData = $note->attachments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $att): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <a href="<?php echo e(asset('storage/'.$att->file_path)); ?>" target="_blank" class="badge bg-light text-dark text-decoration-none me-1">
+                    <a download href="<?php echo e(asset('storage/'.$att->file_path)); ?>" target="_blank" class="badge bg-light text-dark text-decoration-none me-1">
                         <i class="bi bi-paperclip"></i> <?php echo e($att->original_name); ?>
 
                     </a>

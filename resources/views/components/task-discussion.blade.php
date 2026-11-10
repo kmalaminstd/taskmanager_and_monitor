@@ -60,7 +60,7 @@
             @if(isset($note->attachments) && $note->attachments->count())
             <div class="mt-2">
                 @foreach($note->attachments as $att)
-                    <a href="{{ asset('storage/'.$att->file_path) }}" target="_blank" class="badge bg-light text-dark text-decoration-none me-1">
+                    <a download href="{{ asset('storage/'.$att->file_path) }}" target="_blank" class="badge bg-light text-dark text-decoration-none me-1">
                         <i class="bi bi-paperclip"></i> {{ $att->original_name }}
                     </a>
                 @endforeach

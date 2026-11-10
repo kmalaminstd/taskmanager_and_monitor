@@ -69,7 +69,7 @@
 </div>
 
 <?php if($tasks->hasPages()): ?>
-<div class="mt-4"><?php echo e($tasks->links()); ?></div>
+<div class="mt-4"><?php echo e($tasks->links('vendor.pagination.bootstrap-5')); ?></div>
 <?php endif; ?>
 <?php $__env->stopSection(); ?>
 
