@@ -14,7 +14,10 @@
 <div class="card border-0 shadow-sm mb-4" id="task-discussion">
     <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
         <span><i class="bi bi-chat-dots me-1"></i> Discussion</span>
-        <span class="badge bg-secondary"><?php echo e($notes->count()); ?></span>
+        <div class="d-flex gap-2 align-items-center">
+            <span class="badge bg-secondary"><?php echo e($notes->count()); ?></span>
+            <span><button class="btn btn-sm btn-primary chat_refresh_btn" href="#">Refresh</button></span>
+        </div>
     </div>
     <div class="card-body">
         <form method="POST" action="<?php echo e(route('tasks.comments.store', $task)); ?>" enctype="multipart/form-data" class="mb-4">
@@ -93,4 +96,10 @@
         <?php endif; ?>
     </div>
 </div>
-<?php /**PATH /mnt/newvolume5/TaskMasterTest/TaskManager Main/taskmaster main/resources/views/components/task-discussion.blade.php ENDPATH**/ ?>
+
+<script>
+    const chatRefBtn = document.querySelector('.chat_refresh_btn')
+    chatRefBtn.addEventListener('click', ()=>{
+        window.location.reload()
+    })
+</script><?php /**PATH /mnt/newvolume5/TaskMasterTest/TaskManager Main/taskmaster main/resources/views/components/task-discussion.blade.php ENDPATH**/ ?>

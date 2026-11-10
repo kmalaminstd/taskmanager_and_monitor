@@ -14,7 +14,10 @@
 <div class="card border-0 shadow-sm mb-4" id="task-discussion">
     <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
         <span><i class="bi bi-chat-dots me-1"></i> Discussion</span>
-        <span class="badge bg-secondary">{{ $notes->count() }}</span>
+        <div class="d-flex gap-2 align-items-center">
+            <span class="badge bg-secondary">{{ $notes->count() }}</span>
+            <span><button class="btn btn-sm btn-primary chat_refresh_btn" href="#">Refresh</button></span>
+        </div>
     </div>
     <div class="card-body">
         <form method="POST" action="{{ route('tasks.comments.store', $task) }}" enctype="multipart/form-data" class="mb-4">
@@ -91,3 +94,10 @@
         @endforelse
     </div>
 </div>
+
+<script>
+    const chatRefBtn = document.querySelector('.chat_refresh_btn')
+    chatRefBtn.addEventListener('click', ()=>{
+        window.location.reload()
+    })
+</script>
