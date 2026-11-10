@@ -79,9 +79,7 @@
                         <i class="bi bi-arrow-left-right"></i> Request Transfer
                     </button>
 
-                    <button type="button" class="btn btn-outline-info me-1" data-bs-toggle="modal" data-bs-target="#assistanceModal">
-                        <i class="bi bi-people"></i> Request Assistance
-                    </button>
+                    
 
                 <?php endif; ?>
 
@@ -190,7 +188,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Transfer To <span class="text-danger">*</span></label>
-                        <select name="requested_new_assignee_id" class="form-select" required>
+                        <select name="requested_new_assignee_id" class="form-select select2-enable" required>
                             <option value="">Select team member...</option>
                             <?php $__currentLoopData = \App\Models\User::where('role','assignee')->where('status','active')->where('id','!=',auth()->id())->orderBy('name')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <option value="<?php echo e($user->id); ?>"><?php echo e($user->name); ?></option>
@@ -228,7 +226,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Select Team Members <span class="text-danger">*</span></label>
-                        <select name="helper_ids[]" id="helperSelect" class="form-select select2-helpers" multiple required style="width:100%;">
+                        <select name="helper_ids[]" id="helperSelect" class="form-select select2-enable" multiple required style="width:100%;">
                             <?php $__currentLoopData = \App\Models\User::whereIn('role',['assignee','supervisor'])->where('status','active')->where('id','!=',auth()->id())->orderBy('name')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <option value="<?php echo e($user->id); ?>"><?php echo e($user->name); ?> (<?php echo e($user->role); ?>)</option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -284,7 +282,11 @@ document.addEventListener('DOMContentLoaded', function () {
 <?php if(isset($assignment) && $assignment->task): ?>
 <div class="row mt-4">
     <div class="col-12">
-        <?php echo $__env->make('components.task-subtasks', ['task' => $assignment->task], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        
+
+<?php echo $__env->make('components.task-assistance-list', ['assistances' => $assistances ?? collect(), 'canRemove' => false], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
+<?php echo $__env->make('components.task-subtasks', ['task' => $assignment->task], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
         <?php echo $__env->make('components.task-discussion', ['task' => $assignment->task], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </div>
 </div>

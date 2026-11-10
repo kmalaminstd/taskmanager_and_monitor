@@ -69,7 +69,7 @@
                     <input type="date" name="deadline" class="form-control form-control-sm">
                 </div>
                 <div class="col-md-2">
-                    <select name="assignee_id" class="form-select form-select-sm">
+                    <select name="assignee_id" class="form-select select2-enable form-select-sm">
                         <option value="">Assignee</option>
                         <?php $__currentLoopData = \App\Models\User::where('role','assignee')->where('status','active')->orderBy('name')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($u->id); ?>"><?php echo e($u->name); ?></option>

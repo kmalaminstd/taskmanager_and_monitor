@@ -32,12 +32,12 @@
 
                     <div class="mb-3">
                         <label class="form-label">New Assignee(s) <span class="text-danger">*</span></label>
-                        <select name="new_assignee_ids[]" class="form-select @error('new_assignee_ids') is-invalid @enderror" multiple size="7" required>
+                        <select name="new_assignee_ids[]" class="form-select select2-enable @error('new_assignee_ids') is-invalid @enderror" multiple size="7" required>
                             @foreach($assignees as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
                             @endforeach
                         </select>
-                        <div class="form-text">Hold Ctrl/Cmd to select multiple. These will become the new active assignees.</div>
+                        <div class="form-text">Search and select one or more. These will become the new active assignees.</div>
                         @error('new_assignee_ids') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                     </div>
 

@@ -73,6 +73,8 @@ Route::prefix('admin')
 
         Route::get('/assistance', [App\Http\Controllers\Admin\AssistanceController::class, 'index'])->name('assistance.index');
         Route::get('/assistance/{assistance}', [App\Http\Controllers\Admin\AssistanceController::class, 'show'])->name('assistance.show');
+        Route::post('/tasks/{task}/assignments/{assignment}/assistance', [App\Http\Controllers\Admin\AssistanceController::class, 'storeForAssignment'])->name('assistance.store-for-assignment');
+        Route::delete('/assistance/{assistance}', [App\Http\Controllers\Admin\AssistanceController::class, 'destroy'])->name('assistance.destroy');
 
         // Reports
         Route::get('/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
@@ -122,6 +124,7 @@ Route::prefix('assignee')
 
         // Performance
         Route::get('/performance', [App\Http\Controllers\Assignee\PerformanceController::class, 'index'])->name('performance.index');
+        Route::post('/reminders/complete', [App\Http\Controllers\Assignee\ReminderController::class, 'complete'])->name('reminders.complete');
     });
 
 

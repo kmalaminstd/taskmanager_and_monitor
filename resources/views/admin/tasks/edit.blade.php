@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Category</label>
-                            <select name="category_id" class="form-select">
+                            <select name="category_id" class="form-select select2-enable">
                                 <option value="">— None —</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}" @selected(old('category_id', $task->category_id) == $cat->id)>{{ $cat->name }}</option>
@@ -52,7 +52,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Assignees (active)</label>
-                        <select name="assignee_ids[]" class="form-select" multiple size="6">
+                        <select name="assignee_ids[]" class="form-select select2-enable" multiple size="6">
                             @foreach($assignees as $user)
                                 <option value="{{ $user->id }}"
                                     @selected(collect(old('assignee_ids', $currentAssigneeIds))->contains($user->id))>

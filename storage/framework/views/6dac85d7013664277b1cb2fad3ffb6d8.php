@@ -43,7 +43,7 @@
             <div class="list-group list-group-flush">
                 <?php $__empty_1 = true; $__currentLoopData = $outgoing; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $req): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <a href="<?php echo e(route('assignee.assistance.show', $req)); ?>" class="list-group-item list-group-item-action">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <div class="fw-medium"><?php echo e($req->task->title ?? '—'); ?></div>
                             <small class="text-muted">

@@ -64,6 +64,7 @@
                             <th>Started</th>
                             <th>Submitted</th>
                             <th>Deadline</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,6 +87,15 @@
                             <td>{{ $assignment->started_at?->format('M d, H:i') ?? '—' }}</td>
                             <td>{{ $assignment->submitted_at?->format('M d, H:i') ?? '—' }}</td>
                             <td>{{ $assignment->deadline?->format('M d, Y') ?? '—' }}</td>
+                            <td>
+                                @if($assignment->is_active && !in_array($assignment->status, ['completed', 'cancelled']))
+                                <button type="button" class="btn btn-sm btn-outline-info"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#adminAssistModal{{ $assignment->id }}">
+                                    <i class="bi bi-people"></i> Add Assistance
+                                </button>
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -116,6 +126,14 @@
             </ul>
         </div>
         @endif
+    </div>
+
+    <div class="col-lg-4">
+        {{-- Assistance list --}}
+@php
+    $assistances = $task->assistanceRequests ?? $task->assistanceRequests()->with(['users','requester','assignment.assignee'])->latest()->get();
+@endphp
+@include('components.task-assistance-list', ['assistances' => $assistances, 'canRemove' => true])
     </div>
 
     <div class="col-lg-4">
@@ -165,5 +183,48 @@
         @include('components.task-discussion', ['task' => $task])
     </div>
 </div>
+
+
+
+
+
+{{-- Admin assign assistance modals --}}
+@foreach($task->assignments->where('is_active', true) as $assignment)
+@if(!in_array($assignment->status, ['completed', 'cancelled']))
+<div class="modal fade" id="adminAssistModal{{ $assignment->id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('admin.assistance.store-for-assignment', [$task, $assignment]) }}">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Assistance for {{ $assignment->assignee->name ?? 'Assignee' }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted mb-3">Task: <strong>{{ $task->title }}</strong></p>
+                    <div class="mb-3">
+                        <label class="form-label">Select Helpers <span class="text-danger">*</span></label>
+                        <select name="helper_ids[]" class="form-select select2-enable" multiple required data-placeholder="Search team members...">
+                            @foreach(\App\Models\User::whereIn('role', ['assignee', 'supervisor'])->where('status', 'active')->where('id', '!=', $assignment->assignee_id)->orderBy('name')->get() as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->role }})</option>
+                            @endforeach
+                        </select>
+                        <div class="form-text">Search and select one or more people to help this assignee.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Instructions / why help is needed <span class="text-danger">*</span></label>
+                        <textarea name="description" class="form-control" rows="3" required placeholder="Describe what the helpers should do..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info text-white">Assign Assistance</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endif
+@endforeach
 
 @endsection

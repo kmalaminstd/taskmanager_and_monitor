@@ -47,47 +47,115 @@
             </div>
         </div>
     </div>
-    <div class="col-6 col-md-3">
-        <div class="stat-card">
-            <div class="d-flex align-items-center gap-2">
-                <div class="icon bg-danger bg-opacity-10 text-danger"><i class="bi bi-exclamation-triangle"></i></div>
-                <div>
-                    <div class="text-muted small">Overdue</div>
-                    <div class="fs-4 fw-bold"><?php echo e($stats['overdue']); ?></div>
+</div>
+
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h6 class="mb-0 fw-semibold"><i class="bi bi-bell me-1 text-warning"></i> Today's Reminders</h6>
+    <span class="badge bg-primary"><?php echo e($recurringDone); ?>/<?php echo e($recurringTotal); ?> completed this period</span>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-briefcase me-1"></i> Assigned Tasks</span>
+                <span class="badge bg-primary"><?php echo e($reminderData['assigned']->count()); ?></span>
+            </div>
+            <div class="list-group list-group-flush">
+                <?php $__empty_1 = true; $__currentLoopData = $reminderData['assigned']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="list-group-item <?php echo e(!empty($item['done_this_period']) ? 'opacity-75' : ''); ?>">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <div>
+                            <a href="<?php echo e($item['url']); ?>" class="fw-medium text-decoration-none"><?php echo e($item['title']); ?></a>
+                            <div class="small text-muted">
+                                <?php switch($item['reason']):
+                                    case ('daily'): ?> Daily work <?php break; ?>
+                                    <?php case ('weekly_day'): ?>
+                                    <?php case ('weekly_default'): ?> Weekly work <?php break; ?>
+                                    <?php case ('monthly_day'): ?>
+                                    <?php case ('monthly_default'): ?> Monthly work <?php break; ?>
+                                    <?php case ('deadline_today'): ?> <span class="text-danger">Deadline today</span> <?php break; ?>
+                                    <?php case ('deadline_soon'): ?> Deadline approaching <?php break; ?>
+                                    <?php case ('overdue'): ?> <span class="text-danger">Overdue</span> <?php break; ?>
+                                    <?php default: ?> Reminder
+                                <?php endswitch; ?>
+                                · <?php echo e(ucfirst(str_replace('_',' ', $item['frequency']))); ?>
+
+                                <?php if($item['deadline']): ?> · Due <?php echo e(\Carbon\Carbon::parse($item['deadline'])->format('M d')); ?> <?php endif; ?>
+                            </div>
+                        </div>
+                        <div>
+                            <?php if(!empty($item['done_this_period'])): ?>
+                                <span class="badge bg-success">Done</span>
+                            <?php elseif(in_array($item['frequency'], ['daily','weekly','monthly'])): ?>
+                                <form method="POST" action="<?php echo e(route('assignee.reminders.complete')); ?>">
+                                    <?php echo csrf_field(); ?>
+                                    <input type="hidden" name="type" value="assigned">
+                                    <input type="hidden" name="id" value="<?php echo e($item['source']->id); ?>">
+                                    <input type="hidden" name="frequency" value="<?php echo e($item['frequency']); ?>">
+                                    <button class="btn btn-sm btn-outline-success">Mark done</button>
+                                </form>
+                            <?php else: ?>
+                                <a href="<?php echo e($item['url']); ?>" class="btn btn-sm btn-outline-primary">Open</a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="list-group-item text-center text-muted py-4">No assigned reminders today</div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
-    <div class="col-6 col-md-3">
-        <div class="stat-card">
-            <div class="d-flex align-items-center gap-2">
-                <div class="icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-calendar-day"></i></div>
-                <div>
-                    <div class="text-muted small">Due Today</div>
-                    <div class="fs-4 fw-bold"><?php echo e($stats['due_today']); ?></div>
-                </div>
+
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-journal-plus me-1"></i> Personal Tasks</span>
+                <span class="badge bg-secondary"><?php echo e($reminderData['personal']->count()); ?></span>
             </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-3">
-        <div class="stat-card">
-            <div class="d-flex align-items-center gap-2">
-                <div class="icon bg-secondary bg-opacity-10 text-secondary"><i class="bi bi-send"></i></div>
-                <div>
-                    <div class="text-muted small">Submitted</div>
-                    <div class="fs-4 fw-bold"><?php echo e($stats['submitted']); ?></div>
+            <div class="list-group list-group-flush">
+                <?php $__empty_1 = true; $__currentLoopData = $reminderData['personal']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="list-group-item <?php echo e(!empty($item['done_this_period']) ? 'opacity-75' : ''); ?>">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <div>
+                            <a href="<?php echo e($item['url']); ?>" class="fw-medium text-decoration-none"><?php echo e($item['title']); ?></a>
+                            <div class="small text-muted">
+                                <?php switch($item['reason']):
+                                    case ('daily'): ?> Daily work <?php break; ?>
+                                    <?php case ('weekly_day'): ?>
+                                    <?php case ('weekly_default'): ?> Weekly work <?php break; ?>
+                                    <?php case ('monthly_day'): ?>
+                                    <?php case ('monthly_default'): ?> Monthly work <?php break; ?>
+                                    <?php case ('deadline_today'): ?> <span class="text-danger">Deadline today</span> <?php break; ?>
+                                    <?php case ('deadline_soon'): ?> Deadline approaching (1 day before) <?php break; ?>
+                                    <?php case ('overdue'): ?> <span class="text-danger">Overdue</span> <?php break; ?>
+                                    <?php default: ?> Reminder
+                                <?php endswitch; ?>
+                                · <?php echo e(ucfirst(str_replace('_',' ', $item['frequency']))); ?>
+
+                                <?php if($item['deadline']): ?> · Due <?php echo e(\Carbon\Carbon::parse($item['deadline'])->format('M d')); ?> <?php endif; ?>
+                            </div>
+                        </div>
+                        <div>
+                            <?php if(!empty($item['done_this_period'])): ?>
+                                <span class="badge bg-success">Done</span>
+                            <?php else: ?>
+                                <form method="POST" action="<?php echo e(route('assignee.reminders.complete')); ?>">
+                                    <?php echo csrf_field(); ?>
+                                    <input type="hidden" name="type" value="personal">
+                                    <input type="hidden" name="id" value="<?php echo e($item['source']->id); ?>">
+                                    <input type="hidden" name="frequency" value="<?php echo e($item['frequency']); ?>">
+                                    <button class="btn btn-sm btn-outline-success">Mark done</button>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-3">
-        <div class="stat-card">
-            <div class="d-flex align-items-center gap-2">
-                <div class="icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-journal"></i></div>
-                <div>
-                    <div class="text-muted small">Personal</div>
-                    <div class="fs-4 fw-bold"><?php echo e($stats['personal_tasks']); ?></div>
-                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="list-group-item text-center text-muted py-4">No personal reminders today</div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -104,7 +172,7 @@
                         <div>
                             <div class="fw-medium"><?php echo e($assignment->task->title ?? '—'); ?></div>
                             <small class="text-muted">
-                                Assigned by <?php echo e($assignment->assignedBy->name ?? '—'); ?> · 
+                                Assigned by <?php echo e($assignment->assignedBy->name ?? '—'); ?> ·
                                 <?php echo e($assignment->assigned_at?->diffForHumans()); ?>
 
                             </small>

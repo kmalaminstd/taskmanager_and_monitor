@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Assignee;
 use App\Http\Controllers\Controller;
 use App\Models\TaskAssignment;
 use App\Models\PersonalTask;
+use App\Services\ReminderService;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(ReminderService $reminders)
     {
         $userId = auth()->id();
 
@@ -48,6 +49,16 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('assignee.dashboard', compact('stats', 'recentAssignments', 'upcomingDeadlines'));
+        $reminderData = $reminders->forAssignee($userId);
+
+        // Completion streak stats for recurring
+        $recurringDone = collect($reminderData['assigned'])->where('done_this_period', true)->count()
+            + collect($reminderData['personal'])->where('done_this_period', true)->count();
+        $recurringTotal = collect($reminderData['assigned'])->count()
+            + collect($reminderData['personal'])->count();
+
+        return view('assignee.dashboard', compact(
+            'stats', 'recentAssignments', 'upcomingDeadlines', 'reminderData', 'recurringDone', 'recurringTotal'
+        ));
     }
 }

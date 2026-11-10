@@ -38,7 +38,7 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <select name="assignee_id" class="form-select">
+                <select name="assignee_id" class="form-select select2-enable">
                     <option value="">All Assignees</option>
                     @foreach($assignees as $user)
                         <option value="{{ $user->id }}" @selected(($filters['assignee_id'] ?? '') == $user->id)>{{ $user->name }}</option>

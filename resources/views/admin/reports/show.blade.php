@@ -13,7 +13,7 @@
         <input type="date" name="from" class="form-control form-control-sm" value="{{ $from->format('Y-m-d') }}">
         <input type="date" name="to" class="form-control form-control-sm" value="{{ $to->format('Y-m-d') }}">
         @if(in_array($type, ['employee','completed','overdue','late']))
-        <select name="user_id" class="form-select form-select-sm">
+        <select name="user_id" class="form-select select2-enable form-select-sm">
             <option value="">All Employees</option>
             @foreach($users as $u)
                 <option value="{{ $u->id }}" @selected($userId == $u->id)>{{ $u->name }}</option>

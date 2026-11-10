@@ -44,7 +44,7 @@
             <div class="list-group list-group-flush">
                 @forelse($outgoing as $req)
                 <a href="{{ route('assignee.assistance.show', $req) }}" class="list-group-item list-group-item-action">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <div class="fw-medium">{{ $req->task->title ?? '—' }}</div>
                             <small class="text-muted">

@@ -54,7 +54,7 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <select name="assignee_id" class="form-select form-select-sm">
+                <select name="assignee_id" class="form-select select2-enable form-select-sm">
                     <option value="">All Assignees</option>
                     @foreach($assignees as $u)
                         <option value="{{ $u->id }}" @selected(request('assignee_id')==$u->id)>{{ $u->name }}</option>

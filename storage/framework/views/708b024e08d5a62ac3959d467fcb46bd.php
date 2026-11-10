@@ -63,6 +63,7 @@
                             <th>Started</th>
                             <th>Submitted</th>
                             <th>Deadline</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,6 +88,15 @@
                             <td><?php echo e($assignment->started_at?->format('M d, H:i') ?? '—'); ?></td>
                             <td><?php echo e($assignment->submitted_at?->format('M d, H:i') ?? '—'); ?></td>
                             <td><?php echo e($assignment->deadline?->format('M d, Y') ?? '—'); ?></td>
+                            <td>
+                                <?php if($assignment->is_active && !in_array($assignment->status, ['completed', 'cancelled'])): ?>
+                                <button type="button" class="btn btn-sm btn-outline-info"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#adminAssistModal<?php echo e($assignment->id); ?>">
+                                    <i class="bi bi-people"></i> Add Assistance
+                                </button>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
@@ -118,6 +128,14 @@
             </ul>
         </div>
         <?php endif; ?>
+    </div>
+
+    <div class="col-lg-4">
+        
+<?php
+    $assistances = $task->assistanceRequests ?? $task->assistanceRequests()->with(['users','requester','assignment.assignee'])->latest()->get();
+?>
+<?php echo $__env->make('components.task-assistance-list', ['assistances' => $assistances, 'canRemove' => true], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </div>
 
     <div class="col-lg-4">
@@ -171,6 +189,49 @@
         <?php echo $__env->make('components.task-discussion', ['task' => $task], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </div>
 </div>
+
+
+
+
+
+
+<?php $__currentLoopData = $task->assignments->where('is_active', true); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $assignment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+<?php if(!in_array($assignment->status, ['completed', 'cancelled'])): ?>
+<div class="modal fade" id="adminAssistModal<?php echo e($assignment->id); ?>" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="<?php echo e(route('admin.assistance.store-for-assignment', [$task, $assignment])); ?>">
+            <?php echo csrf_field(); ?>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Assistance for <?php echo e($assignment->assignee->name ?? 'Assignee'); ?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted mb-3">Task: <strong><?php echo e($task->title); ?></strong></p>
+                    <div class="mb-3">
+                        <label class="form-label">Select Helpers <span class="text-danger">*</span></label>
+                        <select name="helper_ids[]" class="form-select select2-enable" multiple required data-placeholder="Search team members...">
+                            <?php $__currentLoopData = \App\Models\User::whereIn('role', ['assignee', 'supervisor'])->where('status', 'active')->where('id', '!=', $assignment->assignee_id)->orderBy('name')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($user->id); ?>"><?php echo e($user->name); ?> (<?php echo e($user->role); ?>)</option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
+                        <div class="form-text">Search and select one or more people to help this assignee.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Instructions / why help is needed <span class="text-danger">*</span></label>
+                        <textarea name="description" class="form-control" rows="3" required placeholder="Describe what the helpers should do..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info text-white">Assign Assistance</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<?php endif; ?>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 <?php $__env->stopSection(); ?>
 

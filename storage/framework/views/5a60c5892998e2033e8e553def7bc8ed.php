@@ -10,6 +10,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--bootstrap-5 .select2-selection { min-height: 38px; }
+        .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered { display: flex; flex-wrap: wrap; gap: 2px; }
+    </style>
     <?php echo $__env->yieldPushContent('styles'); ?>
 </head>
 <body>
@@ -145,6 +151,33 @@
                 }
             }
         });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+    (function() {
+        function initSelect2(context) {
+            const $root = context ? $(context) : $(document);
+            $root.find('select.select2-enable, select[multiple]').each(function() {
+                const $el = $(this);
+                if ($el.hasClass('select2-hidden-accessible')) return;
+                if ($el.data('select2-skip')) return;
+                const isMultiple = $el.prop('multiple');
+                const opts = {
+                    theme: 'bootstrap-5',
+                    width: '100%',
+                    placeholder: $el.data('placeholder') || (isMultiple ? 'Select options...' : 'Select...'),
+                    allowClear: !$el.prop('required') || isMultiple,
+                    closeOnSelect: !isMultiple
+                };
+                const $modal = $el.closest('.modal');
+                if ($modal.length) opts.dropdownParent = $modal;
+                $el.select2(opts);
+            });
+        }
+        $(document).ready(function() { initSelect2(); });
+        $(document).on('shown.bs.modal', '.modal', function() { initSelect2(this); });
+        window.initSelect2 = initSelect2;
+    })();
     </script>
     <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>

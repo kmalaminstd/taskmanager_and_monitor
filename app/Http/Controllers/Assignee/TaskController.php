@@ -35,9 +35,27 @@ class TaskController extends Controller
     {
         $this->authorizeAssignment($assignment);
 
-        $assignment->load(['task.category', 'task.attachments', 'assignedBy', 'notes.user', 'submissions']);
+        $assignment->load([
+            'task.category',
+            'task.attachments',
+            'assignedBy',
+            'notes.user',
+            'submissions',
+            'task.assistanceRequests' => function ($q) use ($assignment) {
+                $q->where(function ($q2) use ($assignment) {
+                    $q2->where('task_assignment_id', $assignment->id)
+                       ->orWhereNull('task_assignment_id');
+                })->with(['users', 'requester']);
+            },
+        ]);
 
-        return view('assignee.tasks.show', compact('assignment'));
+        $assistances = $assignment->task
+            ? $assignment->task->assistanceRequests
+                ->filter(fn ($a) => !$a->task_assignment_id || (int)$a->task_assignment_id === (int)$assignment->id)
+                ->values()
+            : collect();
+
+        return view('assignee.tasks.show', compact('assignment', 'assistances'));
     }
 
     public function start(TaskAssignment $assignment)

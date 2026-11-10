@@ -67,7 +67,7 @@
                     <input type="date" name="deadline" class="form-control form-control-sm">
                 </div>
                 <div class="col-md-2">
-                    <select name="assignee_id" class="form-select form-select-sm">
+                    <select name="assignee_id" class="form-select select2-enable form-select-sm">
                         <option value="">Assignee</option>
                         @foreach(\App\Models\User::where('role','assignee')->where('status','active')->orderBy('name')->get() as $u)
                             <option value="{{ $u->id }}">{{ $u->name }}</option>

@@ -31,19 +31,12 @@ class PersonalTaskController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'deadline' => ['nullable', 'date'],
-            'priority' => ['required', 'in:high,medium,low'],
-            'frequency' => ['required', 'in:one_time,daily,weekly,monthly'],
-        ]);
+        $data = $this->validated($request);
+        $data['user_id'] = auth()->id();
+        $data['status'] = 'pending';
+        $data['reminder_days_before'] = $data['reminder_days_before'] ?? 1;
 
-        PersonalTask::create([
-            ...$data,
-            'user_id' => auth()->id(),
-            'status' => 'pending',
-        ]);
+        PersonalTask::create($data);
 
         return redirect()
             ->route('assignee.personal-tasks.index')
@@ -60,16 +53,10 @@ class PersonalTaskController extends Controller
     {
         $this->authorizeOwner($personalTask);
 
-        $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'deadline' => ['nullable', 'date'],
-            'priority' => ['required', 'in:high,medium,low'],
-            'frequency' => ['required', 'in:one_time,daily,weekly,monthly'],
-            'status' => ['required', 'in:pending,in_progress,completed,cancelled'],
-        ]);
+        $data = $this->validated($request, true);
+        $data['reminder_days_before'] = $data['reminder_days_before'] ?? 1;
 
-        if ($data['status'] === 'completed' && $personalTask->status !== 'completed') {
+        if (($data['status'] ?? null) === 'completed' && $personalTask->status !== 'completed') {
             $data['completed_at'] = now();
         }
 
@@ -98,6 +85,25 @@ class PersonalTaskController extends Controller
         ]);
 
         return back()->with('success', 'Task marked as completed.');
+    }
+
+    protected function validated(Request $request, bool $withStatus = false): array
+    {
+        $rules = [
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'deadline' => ['nullable', 'date'],
+            'priority' => ['required', 'in:high,medium,low'],
+            'frequency' => ['required', 'in:one_time,daily,weekly,monthly'],
+            'recurrence_weekday' => ['nullable', 'integer', 'min:0', 'max:6'],
+            'recurrence_monthday' => ['nullable', 'integer', 'min:1', 'max:31'],
+            'reminder_days_before' => ['nullable', 'integer', 'min:0', 'max:30'],
+        ];
+        if ($withStatus) {
+            $rules['status'] = ['required', 'in:pending,in_progress,completed,cancelled'];
+        }
+
+        return $request->validate($rules);
     }
 
     protected function authorizeOwner(PersonalTask $task): void

@@ -19,6 +19,9 @@ class Task extends Model
         'deadline',
         'task_type',
         'frequency',
+        'reminder_days_before',
+        'recurrence_monthday',
+        'recurrence_weekday',
         'instructions',
         'status',
     ];

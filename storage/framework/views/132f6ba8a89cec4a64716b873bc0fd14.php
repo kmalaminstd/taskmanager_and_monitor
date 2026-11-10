@@ -52,7 +52,7 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <select name="assignee_id" class="form-select form-select-sm">
+                <select name="assignee_id" class="form-select select2-enable form-select-sm">
                     <option value="">All Assignees</option>
                     <?php $__currentLoopData = $assignees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <option value="<?php echo e($u->id); ?>" <?php if(request('assignee_id')==$u->id): echo 'selected'; endif; ?>><?php echo e($u->name); ?></option>
@@ -149,7 +149,7 @@
         </table>
     </div>
     <?php if($assignments->hasPages()): ?>
-    <div class="card-footer bg-white"><?php echo e($assignments->links()); ?></div>
+    <div class="card-footer bg-white"><?php echo e($assignments->links('vendor.pagination.bootstrap-5')); ?></div>
     <?php endif; ?>
 </div>
 <?php $__env->stopSection(); ?>

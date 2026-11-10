@@ -17,6 +17,9 @@ class PersonalTask extends Model
         'deadline',
         'priority',
         'frequency',
+        'recurrence_weekday',
+        'recurrence_monthday',
+        'reminder_days_before',
         'status',
         'completed_at',
         'attachment',
@@ -30,5 +33,10 @@ class PersonalTask extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function completions()
+    {
+        return $this->morphMany(RecurringCompletion::class, 'taskable');
     }
 }

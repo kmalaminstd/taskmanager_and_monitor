@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Category</label>
-                            <select name="category_id" class="form-select">
+                            <select name="category_id" class="form-select select2-enable">
                                 <option value="">— None —</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}" @selected(old('category_id') == $cat->id)>{{ $cat->name }}</option>
@@ -55,8 +55,8 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Task Type <span class="text-danger">*</span></label>
                             <select name="task_type" id="task_type" class="form-select" required>
-                                <option value="one_time" @selected(old('task_type', 'one_time') === 'one_time')>One-time</option>
-                                <option value="recurring" @selected(old('task_type') === 'recurring')>Recurring</option>
+                                <option value="one_time" @selected(old('task_type', 'one_time') === 'one_time')>One-time (single task)</option>
+                                <option value="recurring" @selected(old('task_type') === 'recurring')>Recurring (daily / weekly / monthly)</option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3" id="frequency_wrapper" style="display:none;">
@@ -71,7 +71,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Assign To <span class="text-danger">*</span></label>
-                        <select name="assignee_ids[]" class="form-select @error('assignee_ids') is-invalid @enderror" multiple size="6" required>
+                        <select name="assignee_ids[]" class="form-select select2-enable @error('assignee_ids') is-invalid @enderror" multiple size="6" required>
                             @foreach($assignees as $user)
                                 <option value="{{ $user->id }}" @selected(collect(old('assignee_ids', []))->contains($user->id))>
                                     {{ $user->name }} ({{ $user->email }})
@@ -109,12 +109,34 @@
 
 @push('scripts')
 <script>
-    const typeSelect = document.getElementById('task_type');
-    const freqWrapper = document.getElementById('frequency_wrapper');
-    function toggleFreq() {
-        freqWrapper.style.display = typeSelect.value === 'recurring' ? 'block' : 'none';
+(function () {
+    function syncTaskTypeUI() {
+        var typeSelect = document.getElementById('task_type');
+        var freqWrapper = document.getElementById('frequency_wrapper');
+        var weekdayWrap = document.getElementById('weekday_wrap');
+        var monthdayWrap = document.getElementById('monthday_wrap');
+        var freq = document.getElementById('frequency');
+        if (!typeSelect || !freqWrapper) return;
+        var isRecurring = typeSelect.value === 'recurring';
+        freqWrapper.style.display = isRecurring ? '' : 'none';
+        var f = freq ? freq.value : '';
+        if (weekdayWrap) weekdayWrap.style.display = (isRecurring && f === 'weekly') ? '' : 'none';
+        if (monthdayWrap) monthdayWrap.style.display = (isRecurring && f === 'monthly') ? '' : 'none';
     }
-    typeSelect.addEventListener('change', toggleFreq);
-    toggleFreq();
+    document.addEventListener('DOMContentLoaded', function () {
+        var typeSelect = document.getElementById('task_type');
+        var freq = document.getElementById('frequency');
+        if (typeSelect) {
+            typeSelect.addEventListener('change', syncTaskTypeUI);
+            if (window.jQuery) jQuery(typeSelect).on('change select2:select', syncTaskTypeUI);
+        }
+        if (freq) {
+            freq.addEventListener('change', syncTaskTypeUI);
+            if (window.jQuery) jQuery(freq).on('change select2:select', syncTaskTypeUI);
+        }
+        syncTaskTypeUI();
+    });
+})();
 </script>
 @endpush
+

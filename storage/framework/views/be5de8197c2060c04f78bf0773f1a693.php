@@ -37,7 +37,7 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <select name="assignee_id" class="form-select">
+                <select name="assignee_id" class="form-select select2-enable">
                     <option value="">All Assignees</option>
                     <?php $__currentLoopData = $assignees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <option value="<?php echo e($user->id); ?>" <?php if(($filters['assignee_id'] ?? '') == $user->id): echo 'selected'; endif; ?>><?php echo e($user->name); ?></option>

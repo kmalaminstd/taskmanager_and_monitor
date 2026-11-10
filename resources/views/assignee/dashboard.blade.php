@@ -49,47 +49,113 @@
             </div>
         </div>
     </div>
-    <div class="col-6 col-md-3">
-        <div class="stat-card">
-            <div class="d-flex align-items-center gap-2">
-                <div class="icon bg-danger bg-opacity-10 text-danger"><i class="bi bi-exclamation-triangle"></i></div>
-                <div>
-                    <div class="text-muted small">Overdue</div>
-                    <div class="fs-4 fw-bold">{{ $stats['overdue'] }}</div>
+</div>
+
+{{-- Today's Reminders --}}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h6 class="mb-0 fw-semibold"><i class="bi bi-bell me-1 text-warning"></i> Today's Reminders</h6>
+    <span class="badge bg-primary">{{ $recurringDone }}/{{ $recurringTotal }} completed this period</span>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-briefcase me-1"></i> Assigned Tasks</span>
+                <span class="badge bg-primary">{{ $reminderData['assigned']->count() }}</span>
+            </div>
+            <div class="list-group list-group-flush">
+                @forelse($reminderData['assigned'] as $item)
+                <div class="list-group-item {{ !empty($item['done_this_period']) ? 'opacity-75' : '' }}">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <div>
+                            <a href="{{ $item['url'] }}" class="fw-medium text-decoration-none">{{ $item['title'] }}</a>
+                            <div class="small text-muted">
+                                @switch($item['reason'])
+                                    @case('daily') Daily work @break
+                                    @case('weekly_day')
+                                    @case('weekly_default') Weekly work @break
+                                    @case('monthly_day')
+                                    @case('monthly_default') Monthly work @break
+                                    @case('deadline_today') <span class="text-danger">Deadline today</span> @break
+                                    @case('deadline_soon') Deadline approaching @break
+                                    @case('overdue') <span class="text-danger">Overdue</span> @break
+                                    @default Reminder
+                                @endswitch
+                                · {{ ucfirst(str_replace('_',' ', $item['frequency'])) }}
+                                @if($item['deadline']) · Due {{ \Carbon\Carbon::parse($item['deadline'])->format('M d') }} @endif
+                            </div>
+                        </div>
+                        <div>
+                            @if(!empty($item['done_this_period']))
+                                <span class="badge bg-success">Done</span>
+                            @elseif(in_array($item['frequency'], ['daily','weekly','monthly']))
+                                <form method="POST" action="{{ route('assignee.reminders.complete') }}">
+                                    @csrf
+                                    <input type="hidden" name="type" value="assigned">
+                                    <input type="hidden" name="id" value="{{ $item['source']->id }}">
+                                    <input type="hidden" name="frequency" value="{{ $item['frequency'] }}">
+                                    <button class="btn btn-sm btn-outline-success">Mark done</button>
+                                </form>
+                            @else
+                                <a href="{{ $item['url'] }}" class="btn btn-sm btn-outline-primary">Open</a>
+                            @endif
+                        </div>
+                    </div>
                 </div>
+                @empty
+                <div class="list-group-item text-center text-muted py-4">No assigned reminders today</div>
+                @endforelse
             </div>
         </div>
     </div>
-    <div class="col-6 col-md-3">
-        <div class="stat-card">
-            <div class="d-flex align-items-center gap-2">
-                <div class="icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-calendar-day"></i></div>
-                <div>
-                    <div class="text-muted small">Due Today</div>
-                    <div class="fs-4 fw-bold">{{ $stats['due_today'] }}</div>
-                </div>
+
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-journal-plus me-1"></i> Personal Tasks</span>
+                <span class="badge bg-secondary">{{ $reminderData['personal']->count() }}</span>
             </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-3">
-        <div class="stat-card">
-            <div class="d-flex align-items-center gap-2">
-                <div class="icon bg-secondary bg-opacity-10 text-secondary"><i class="bi bi-send"></i></div>
-                <div>
-                    <div class="text-muted small">Submitted</div>
-                    <div class="fs-4 fw-bold">{{ $stats['submitted'] }}</div>
+            <div class="list-group list-group-flush">
+                @forelse($reminderData['personal'] as $item)
+                <div class="list-group-item {{ !empty($item['done_this_period']) ? 'opacity-75' : '' }}">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <div>
+                            <a href="{{ $item['url'] }}" class="fw-medium text-decoration-none">{{ $item['title'] }}</a>
+                            <div class="small text-muted">
+                                @switch($item['reason'])
+                                    @case('daily') Daily work @break
+                                    @case('weekly_day')
+                                    @case('weekly_default') Weekly work @break
+                                    @case('monthly_day')
+                                    @case('monthly_default') Monthly work @break
+                                    @case('deadline_today') <span class="text-danger">Deadline today</span> @break
+                                    @case('deadline_soon') Deadline approaching (1 day before) @break
+                                    @case('overdue') <span class="text-danger">Overdue</span> @break
+                                    @default Reminder
+                                @endswitch
+                                · {{ ucfirst(str_replace('_',' ', $item['frequency'])) }}
+                                @if($item['deadline']) · Due {{ \Carbon\Carbon::parse($item['deadline'])->format('M d') }} @endif
+                            </div>
+                        </div>
+                        <div>
+                            @if(!empty($item['done_this_period']))
+                                <span class="badge bg-success">Done</span>
+                            @else
+                                <form method="POST" action="{{ route('assignee.reminders.complete') }}">
+                                    @csrf
+                                    <input type="hidden" name="type" value="personal">
+                                    <input type="hidden" name="id" value="{{ $item['source']->id }}">
+                                    <input type="hidden" name="frequency" value="{{ $item['frequency'] }}">
+                                    <button class="btn btn-sm btn-outline-success">Mark done</button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-3">
-        <div class="stat-card">
-            <div class="d-flex align-items-center gap-2">
-                <div class="icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-journal"></i></div>
-                <div>
-                    <div class="text-muted small">Personal</div>
-                    <div class="fs-4 fw-bold">{{ $stats['personal_tasks'] }}</div>
-                </div>
+                @empty
+                <div class="list-group-item text-center text-muted py-4">No personal reminders today</div>
+                @endforelse
             </div>
         </div>
     </div>
@@ -106,7 +172,7 @@
                         <div>
                             <div class="fw-medium">{{ $assignment->task->title ?? '—' }}</div>
                             <small class="text-muted">
-                                Assigned by {{ $assignment->assignedBy->name ?? '—' }} · 
+                                Assigned by {{ $assignment->assignedBy->name ?? '—' }} ·
                                 {{ $assignment->assigned_at?->diffForHumans() }}
                             </small>
                         </div>
