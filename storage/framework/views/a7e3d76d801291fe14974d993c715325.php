@@ -57,9 +57,52 @@
                     <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
                     <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                 </form>
+                <button type="button" class="btn-solid btn btn-sm btn-outline-dark theme-primary" data-bs-toggle="modal" data-bs-target="#personalTaskViewModal<?php echo e($task->id); ?>">
+                    <i class="bi bi-eye"></i>
+                </button>
             </div>
         </div>
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="personalTaskViewModal<?php echo e($task->id); ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Personal Task - <?php echo e($task->title); ?></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <?php if($task->description): ?>
+                            <p><?php echo e($task->description); ?></p>
+                        <?php endif; ?>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge badge-priority-<?php echo e($task->priority); ?>">Priority: <?php echo e(ucfirst($task->priority)); ?></span>
+                            <span class="badge bg-<?php echo e($task->status === 'completed' ? 'success' : 'secondary'); ?>">
+                               Status: <?php echo e(ucfirst($task->status)); ?>
+
+                            </span>
+                        </div>
+
+                        <div class="small text-muted">
+                            <?php if($task->deadline): ?>
+                                <i class="bi bi-calendar"></i> <?php echo e($task->deadline->format('M d, Y')); ?>
+
+                            <?php endif; ?>
+                            <span class="ms-2"><i class="bi bi-arrow-repeat"></i> <?php echo e(str_replace('_',' ', ucfirst($task->frequency))); ?></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
     <div class="col-12 text-center text-muted py-5">
         <i class="bi bi-journal-plus fs-1 d-block mb-2"></i>

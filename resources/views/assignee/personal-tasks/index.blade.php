@@ -56,9 +56,50 @@
                     @csrf @method('DELETE')
                     <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                 </form>
+                <button type="button" class="btn-solid btn btn-sm btn-outline-dark theme-primary" data-bs-toggle="modal" data-bs-target="#personalTaskViewModal{{ $task->id }}">
+                    <i class="bi bi-eye"></i>
+                </button>
             </div>
         </div>
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="personalTaskViewModal{{ $task->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Personal Task - {{ $task->title }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        @if($task->description)
+                            <p>{{ $task->description }}</p>
+                        @endif
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge badge-priority-{{ $task->priority }}">Priority: {{ ucfirst($task->priority) }}</span>
+                            <span class="badge bg-{{ $task->status === 'completed' ? 'success' : 'secondary' }}">
+                               Status: {{ ucfirst($task->status) }}
+                            </span>
+                        </div>
+
+                        <div class="small text-muted">
+                            @if($task->deadline)
+                                <i class="bi bi-calendar"></i> {{ $task->deadline->format('M d, Y') }}
+                            @endif
+                            <span class="ms-2"><i class="bi bi-arrow-repeat"></i> {{ str_replace('_',' ', ucfirst($task->frequency)) }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @empty
     <div class="col-12 text-center text-muted py-5">
         <i class="bi bi-journal-plus fs-1 d-block mb-2"></i>
